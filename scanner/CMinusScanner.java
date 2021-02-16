@@ -7,6 +7,15 @@ public class CMinusScanner {
   private Token nextToken;
   private BufferedReader inFile;
 
+  public enum StateType {
+    START,
+    INASSIGN,
+    INCOMMENT,
+    INNUM,
+    INID,
+    DONE
+  }
+
   public CMinusScanner(BufferedReader file) {
     inFile = file;
     nextToken = getToken();
