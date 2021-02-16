@@ -1,3 +1,5 @@
+package scanner;
+
 import java.io.*;
 
 public class CMinusScanner {
@@ -27,5 +29,6 @@ public class CMinusScanner {
     //When Done, create Token containing TokenType and Token Data
       //Maybe check for keywords
     //If Error, return TokenType = ERROR_TOKEN
+    return null;
   }
 }
