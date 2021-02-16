@@ -1,24 +1,31 @@
 import java.io.*;
-import java.util.Scanner;
 
-class CMinusScanner {
-  public static void main(String[] args) {
-    System.out.println("Hi mom!");
-    FileInputStream inFile = null;
-    FileOutputStream outFile = null;
-    
-    try {
-      inFile = new FileInputStream("input.cminus");
-      //outFile = new FileOutputStream("output.txt");
-    }
-    catch (FileNotFoundException e) {
-      System.out.println("Seems like your files are not in order, bro!");
-      return;
-    }
-    Scanner inS = new Scanner(inFile);
+public class CMinusScanner {
+  //private BufferedReader inFile;
+  private Token nextToken;
+  private BufferedReader inFile;
 
-    while (inS.hasNext()) {
-      System.out.println(inS.next());
-    }
+  public CMinusScanner(BufferedReader file) {
+    inFile = file;
+    nextToken = scanToken();
+  }
+
+  public Token getNextToken() {
+    Token returnToken = nextToken;
+    if (nextToken.getType() != Token.TokenType.EOF_TOKEN)
+      nextToken = scanToken();
+    return returnToken;
+  }
+
+  public Token viewNextToken() {
+    return nextToken;
+  }
+
+  public Token getToken() {
+    //Start in Start State
+    //Iterate till Done
+    //When Done, create Token containing TokenType and Token Data
+      //Maybe check for keywords
+    //If Error, return TokenType = ERROR_TOKEN
   }
 }
