@@ -7,13 +7,13 @@ public class CMinusScanner {
 
   public CMinusScanner(BufferedReader file) {
     inFile = file;
-    nextToken = scanToken();
+    nextToken = getToken();
   }
 
   public Token getNextToken() {
     Token returnToken = nextToken;
     if (nextToken.getType() != Token.TokenType.EOF_TOKEN)
-      nextToken = scanToken();
+      nextToken = getToken();
     return returnToken;
   }
 

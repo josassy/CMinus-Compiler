@@ -14,7 +14,5 @@ public class ScanDaemon {
 
         BufferedReader inProg = new BufferedReader(in);
         CMinusScanner scanner = new CMinusScanner(inProg);
-
-        
     }
 }
