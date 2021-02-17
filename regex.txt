@@ -1,4 +1,4 @@
-Note: '^' indicaes a NOT
+Note: '^' indicates a NOT
 
 ELSE_TOKEN: else
 IF_TOKEN: if
