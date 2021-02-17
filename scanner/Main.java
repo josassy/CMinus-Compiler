@@ -13,7 +13,7 @@ public class Main {
     FileReader in = null;
     FileWriter out = null;
 
-    String fileStub = "27";
+    String fileStub = "quicksort";
 
     try {
       File outFile = new File(fileStub + ".out");
