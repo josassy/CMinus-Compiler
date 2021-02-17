@@ -1,3 +1,5 @@
+// program from page 27
+
 int fact( int x )
 /* recursive factorial function */
 { if (x > 1) 
