@@ -10,12 +10,21 @@
  * This class follows the structure specified in Louden Appendix B to implement 
  * a token scanner.
  * 
- * To implement scanToken(), we built a DFA that uses nested switch statements 
+ * To implement scanToken(), we built a FSM that uses nested switch statements 
  * to control execution flow according to the DFA specified for this assignment,
  * which can handle the token types in C- as specified in Louden p.491.
  * 
- * Since Java does not handle EOF in the same way as C, we added an EOF flag to
- * the class to indicate when the EOF has been reached.
+ * The outer switch statement switches based on the state of the FSM. If the
+ * machine is at the start of a token (START state), it runs through a series
+ * of if statements and a switch to determine whether to move to another state
+ * or process the next character. If the machine is in an intermediate state,
+ * the algorithm will call unGetChar when moving back to START so that the
+ * terminating character is processed correctly. 
+ * 
+ * Since Java does not handle EOF tokens in the same way as C, we added an EOF 
+ * flag to the class to indicate when the EOF has been reached. This is 
+ * checked only in the START state so that tokens directly before EOF can be 
+ * recorded.
  */
 
 package scanner;
@@ -25,17 +34,28 @@ import java.io.BufferedReader;
 import scanner.Token.TokenType;
 import java.util.HashMap;
 
+/**
+ * The CMinusScanner class is the main utility class that implements the public
+ * Scanner interface. It is able to read from a BufferedReader object and return
+ * one token at a time, as well as indicate when the EOF has been reached.
+ */
 public class CMinusScanner implements Scanner {
   private Token nextToken;
   private BufferedReader inFile;
-  private boolean EOF = false;
-
+  private boolean EOF = false;  
   private HashMap<String, TokenType> reservedWords;
 
+  /**
+   * All the states of the FSM
+   */  
   public enum StateType {
     START, INNUM, INID, INLESS, INGREATER, INNOTEQUAL, INASSIGN, INDIV, INCOMMENT, LEAVECOMMENT, DONE
   }
 
+  /**
+   * Object constructor. Initializes reservedWords list and fetches initial 
+   * token.
+   */
   public CMinusScanner(BufferedReader file) {
     reservedWords = new HashMap<String, TokenType>();
 
@@ -371,6 +391,7 @@ public class CMinusScanner implements Scanner {
       }
     }
 
+    // Once the loop has exited, return the token.
     return new Token(currentToken.getType(), tokenString);
   }
 }

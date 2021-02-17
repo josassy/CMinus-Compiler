@@ -2,6 +2,10 @@ package scanner;
 
 import java.io.*;
 
+/**
+ * Main class to test the CMinusScanner.
+ * Reads in from test files and writes to output in the format "<TOKEN_TYPE> <TOKEN_DATA>"
+ */
 public class Main {
     public static void main(String[] args) {
         FileReader in = null;
