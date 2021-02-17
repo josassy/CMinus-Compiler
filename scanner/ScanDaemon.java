@@ -7,14 +7,19 @@ public class ScanDaemon {
         FileReader in = null;
 
         try {
-            in = new FileReader(args[0]);
+            in = new FileReader("page27.c");
         }
         catch(FileNotFoundException e) {
-            System.out.println("Big problemo, boss!");
+            System.out.println("Big problemo, boss! Couldn't find file!");
             return;
         }
 
-        BufferedReader inProg = new BufferedReader(in);
-        CMinusScanner scanner = new CMinusScanner(inProg);
+        BufferedReader inFile = new BufferedReader(in);
+        CMinusScanner scanner = new CMinusScanner(inFile);
+
+        while (scanner.hasNextToken()) {
+            Token currToken = scanner.getNextToken();
+            System.out.println(currToken.getType() + " " + currToken.getData());
+        }
     }
 }

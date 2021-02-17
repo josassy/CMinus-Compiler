@@ -33,7 +33,8 @@ public class Token {
         CCOMMENT_TOKEN, // */
         ID_TOKEN, // letter letter*
         NUM_TOKEN, // digit digit*
-        EOF_TOKEN
+        EOF,
+        ERROR
     }
 
     private TokenType tokenType;
