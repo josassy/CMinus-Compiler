@@ -1,4 +1,7 @@
-/* implements simple quicksort using valid C- tokens */
+/**
+ * File: quicksort.c
+ * implements simple quicksort using valid C- tokens 
+ */
 void quicksort(int array[], int lowIndex, int highIndex) {
   if (lowIndex < highIndex) {
     int pivot = partition(array, lowIndex, highIndex);

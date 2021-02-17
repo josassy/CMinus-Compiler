@@ -25,6 +25,11 @@
  * flag to the class to indicate when the EOF has been reached. This is 
  * checked only in the START state so that tokens directly before EOF can be 
  * recorded.
+ * 
+ * To integrate with other Java programs, outside code can use the public 
+ * Scanner methods to retrieve C- tokens for further parsing. For outside (non-
+ * Java) programs, a more mature CLI would need to be developed, as a CLI was 
+ * outside of the project requirements.
  */
 
 package scanner;
