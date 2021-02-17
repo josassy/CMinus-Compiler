@@ -1,4 +1,4 @@
-// program from page 27
+/* This is a C- program from page 27 */
 
 int fact( int x )
 /* recursive factorial function */

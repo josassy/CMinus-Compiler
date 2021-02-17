@@ -1,3 +1,4 @@
+/* these cases check for every possible accepted token */
 else
 if
 int
