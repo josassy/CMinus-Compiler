@@ -42,19 +42,18 @@ import java.util.HashMap;
 public class CMinusScanner implements Scanner {
   private Token nextToken;
   private BufferedReader inFile;
-  private boolean EOF = false;  
+  private boolean EOF = false;
   private HashMap<String, TokenType> reservedWords;
 
   /**
    * All the states of the FSM
-   */  
+   */
   public enum StateType {
     START, INNUM, INID, INLESS, INGREATER, INNOTEQUAL, INASSIGN, INDIV, INCOMMENT, LEAVECOMMENT, DONE
   }
 
   /**
-   * Object constructor. Initializes reservedWords list and fetches initial 
-   * token.
+   * Object constructor. Initializes reservedWords list and fetches initial token.
    */
   public CMinusScanner(BufferedReader file) {
     reservedWords = new HashMap<String, TokenType>();
@@ -178,7 +177,7 @@ public class CMinusScanner implements Scanner {
         case START:
           // clear token string from any previous values
           tokenString = "";
-          
+
           // Handle all the characters that would move to a new state rather
           // than being done immediately
           if (Character.isDigit(c)) {
@@ -201,7 +200,7 @@ public class CMinusScanner implements Scanner {
             // Handle all the characters that are processed immediately without
             // any intermediate states
             state = StateType.DONE;
-  
+
             // If EOF flag is set, break out of loop.
             if (EOF) {
               save = false;
@@ -256,8 +255,7 @@ public class CMinusScanner implements Scanner {
             save = false;
             state = StateType.DONE;
             currentToken = new Token(TokenType.ERROR);
-          }
-          else if (!Character.isDigit(c)) {
+          } else if (!Character.isDigit(c)) {
             unGetChar();
             save = false;
             state = StateType.DONE;
@@ -273,7 +271,7 @@ public class CMinusScanner implements Scanner {
             state = StateType.DONE;
             currentToken = new Token(TokenType.ERROR);
           }
-          
+
           else if (!Character.isAlphabetic(c)) {
             unGetChar();
             save = false;
@@ -359,6 +357,11 @@ public class CMinusScanner implements Scanner {
           if (c == '*') {
             state = StateType.LEAVECOMMENT;
           }
+          // special case: need to check for EOF so that scanner can exit in
+          // case of unterminated comment
+          else if (EOF) {
+            state = StateType.START;
+          }
           break;
 
         // determine if */ or we're still in comment
@@ -368,6 +371,11 @@ public class CMinusScanner implements Scanner {
             state = StateType.START;
           } else if (c == '*') {
             state = StateType.LEAVECOMMENT;
+          }
+          // special case: need to check for EOF so that scanner can exit in
+          // case of unterminated comment
+          else if (EOF) {
+            state = StateType.START;
           } else {
             state = StateType.INCOMMENT;
           }

@@ -1,3 +1,10 @@
+/**
+ * File: Token.java
+ * Token class to represent a Token with a type and data attribute.
+ * Contains simple constructor and getters for all attributes, as well as
+ * specifications for the public enum TokenType.
+ */
+
 // SEE PAGE 491 FOR INFORMATION ON C-
 
 package scanner;
@@ -33,8 +40,7 @@ public class Token {
         CCOMMENT_TOKEN, // */
         ID_TOKEN, // letter letter*
         NUM_TOKEN, // digit digit*
-        EOF,
-        ERROR
+        EOF, ERROR
     }
 
     private TokenType tokenType;
