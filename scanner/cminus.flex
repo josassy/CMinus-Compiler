@@ -19,21 +19,29 @@
    this could be optimized */
 
 
-import java_cup.runtime.*;
+package scanner;
+
+import scanner.Token.TokenType;
 
 %%
 
 %public
 %class CMinusJFlexScanner
 %implements Scanner
+%type Token
+%apiprivate
 
 %unicode
 
 %line
 %column
 
+%initthrow{
+java.io.IOException
+%initthrow}
+
 %{
-  StringBuilder string = new StringBuilder();
+  Token nextToken;
   
   private Token token(TokenType type) {
     return new Token(type);
@@ -41,6 +49,23 @@ import java_cup.runtime.*;
 
   private Token token(TokenType type, Object value) {
     return new Token(type, value);
+  }
+
+  public Token getNextToken() throws java.io.IOException {
+    if (nextToken == null) {
+      nextToken = yylex();
+    }
+    Token returnToken = nextToken;
+    if (nextToken.getType() != Token.TokenType.EOF)
+      nextToken = yylex();
+    return returnToken;
+  }
+
+  public Token viewNextToken() throws java.io.IOException {
+    if (nextToken == null) {
+      nextToken = yylex();
+    }
+    return nextToken;
   }
 %}
 
@@ -62,43 +87,43 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
 <YYINITIAL> {
 
   /* keywords */
-  "else"                         { return token(ELSE_TOKEN); }
-  "int"                          { return token(INT_TOKEN); }
-  "if"                           { return token(IF_TOKEN); }
-  "return"                       { return token(RETURN_TOKEN); }
-  "void"                         { return token(VOID_TOKEN); }
-  "while"                        { return token(WHILE_TOKEN); }  
+  "else"                         { return token(TokenType.ELSE_TOKEN); }
+  "int"                          { return token(TokenType.INT_TOKEN); }
+  "if"                           { return token(TokenType.IF_TOKEN); }
+  "return"                       { return token(TokenType.RETURN_TOKEN); }
+  "void"                         { return token(TokenType.VOID_TOKEN); }
+  "while"                        { return token(TokenType.WHILE_TOKEN); }  
   
   /* separators */
-  "("                            { return token(OPAREN_TOKEN); }
-  ")"                            { return token(CPAREN_TOKEN); }
-  "{"                            { return token(OCURLY_TOKEN); }
-  "}"                            { return token(CCURLY_TOKEN); }
-  "["                            { return token(OBRACKET_TOKEN); }
-  "]"                            { return token(CBRACKET_TOKEN); }
-  ";"                            { return token(SEMICOLON_TOKEN); }
-  ","                            { return token(COMMA_TOKEN); }
+  "("                            { return token(TokenType.OPAREN_TOKEN); }
+  ")"                            { return token(TokenType.CPAREN_TOKEN); }
+  "{"                            { return token(TokenType.OCURLY_TOKEN); }
+  "}"                            { return token(TokenType.CCURLY_TOKEN); }
+  "["                            { return token(TokenType.OBRACKET_TOKEN); }
+  "]"                            { return token(TokenType.CBRACKET_TOKEN); }
+  ";"                            { return token(TokenType.SEMICOLON_TOKEN); }
+  ","                            { return token(TokenType.COMMA_TOKEN); }
   
   /* operators */
-  "="                            { return token(ASSIGN_TOKEN); }
-  ">"                            { return token(GREATER_TOKEN); }
-  "<"                            { return token(LESS_TOKEN); }
-  "=="                           { return token(EQL_TOKEN); }
-  "<="                           { return token(LEQ_TOKEN); }
-  ">="                           { return token(GEQ_TOKEN); }
-  "!="                           { return token(NEQ_TOKEN); }
-  "+"                            { return token(PLUS_TOKEN); }
-  "-"                            { return token(MINUS_TOKEN); }
-  "*"                            { return token(MULT_TOKEN); }
-  "/"                            { return token(DIV_TOKEN); }
+  "="                            { return token(TokenType.ASSIGN_TOKEN); }
+  ">"                            { return token(TokenType.GREATER_TOKEN); }
+  "<"                            { return token(TokenType.LESS_TOKEN); }
+  "=="                           { return token(TokenType.EQL_TOKEN); }
+  "<="                           { return token(TokenType.LEQ_TOKEN); }
+  ">="                           { return token(TokenType.GEQ_TOKEN); }
+  "!="                           { return token(TokenType.NEQ_TOKEN); }
+  "+"                            { return token(TokenType.PLUS_TOKEN); }
+  "-"                            { return token(TokenType.MINUS_TOKEN); }
+  "*"                            { return token(TokenType.MULT_TOKEN); }
+  "/"                            { return token(TokenType.DIV_TOKEN); }
 
   /* numeric literals */
 
   /* This is matched together with the minus, because the number is too big to 
      be represented by a positive integer. */
-  "-2147483648"                  { return token(NUM_TOKEN, Integer.valueOf(Integer.MIN_VALUE)); }
+  "-2147483648"                  { return token(TokenType.NUM_TOKEN, Integer.valueOf(Integer.MIN_VALUE)); }
   
-  {DecIntegerLiteral}            { return token(NUM_TOKEN, Integer.valueOf(yytext())); }
+  {DecIntegerLiteral}            { return token(TokenType.NUM_TOKEN, Integer.valueOf(yytext())); }
   
   /* comments */
   {Comment}                      { /* ignore */ }
@@ -107,10 +132,10 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
   {WhiteSpace}                   { /* ignore */ }
 
   /* identifiers */ 
-  {Identifier}                   { return token(ID_TOKEN, yytext()); }  
+  {Identifier}                   { return token(TokenType.ID_TOKEN, yytext()); }  
 }
 
 /* error fallback */
 [^]                              { throw new RuntimeException("Illegal character \""+yytext()+
                                                               "\" at line "+yyline+", column "+yycolumn); }
-<<EOF>>                          { return token(EOF); }
+<<EOF>>                          { return token(TokenType.EOF); }
