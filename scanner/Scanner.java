@@ -9,5 +9,5 @@ package scanner;
 public interface Scanner {
   public Token getNextToken() throws java.io.IOException;
 
-  public Token viewNextToken() throws java.io.IOException;
+  public Token viewNextToken();
 }

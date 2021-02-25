@@ -30,20 +30,23 @@ public class Main {
       return;
     }
 
-    System.out.println(in);
-
+    BufferedReader inFile = new BufferedReader(in);
     try {
-      BufferedReader inFile = new BufferedReader(in);
       // CMinusScanner scanner = new CMinusScanner(inFile);
       CMinusJFlexScanner scanner = new CMinusJFlexScanner(inFile);
-      Token currToken = scanner.getNextToken();
-      while (currToken.getType() != Token.TokenType.EOF) {
-        currToken = scanner.getNextToken();
+      while (scanner.hasNextToken()) {
+        Token currToken = scanner.getNextToken();
         System.out.println(currToken.getType() + " " + currToken.getData());
-        out.write(currToken.getType() + " " + currToken.getData() + "\n");
+
+        // handle exception when writing out
+        try {
+          out.write(currToken.getType() + " " + currToken.getData() + "\n");
+        } catch (IOException e) {
+          System.out.println("Couldn't write to output file");
+        }
       }
     } catch (IOException e) {
-      System.out.println("what is file");
+      System.out.println("Couldn't read from input file");
     }
 
     try {
