@@ -30,17 +30,20 @@ public class Main {
       return;
     }
 
-    BufferedReader inFile = new BufferedReader(in);
-    CMinusScanner scanner = new CMinusScanner(inFile);
+    System.out.println(in);
 
-    while (scanner.hasNextToken()) {
+    try {
+      BufferedReader inFile = new BufferedReader(in);
+      // CMinusScanner scanner = new CMinusScanner(inFile);
+      CMinusJFlexScanner scanner = new CMinusJFlexScanner(inFile);
       Token currToken = scanner.getNextToken();
-      System.out.println(currToken.getType() + " " + currToken.getData());
-      try {
+      while (currToken.getType() != Token.TokenType.EOF) {
+        currToken = scanner.getNextToken();
+        System.out.println(currToken.getType() + " " + currToken.getData());
         out.write(currToken.getType() + " " + currToken.getData() + "\n");
-      } catch (IOException e) {
-        System.out.println("what is file");
       }
+    } catch (IOException e) {
+      System.out.println("what is file");
     }
 
     try {

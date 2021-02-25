@@ -3,10 +3,11 @@ package scanner;
 /**
  * File: Scanner.java
  * 
- * Public interface for CMinusScanner to implement.
- * Defines basic get and view (no munch) methods.
+ * Public interface for CMinusScanner to implement. Defines basic get and view
+ * (no munch) methods.
  */
 public interface Scanner {
-  public Token getNextToken();
-  public Token viewNextToken();
+  public Token getNextToken() throws java.io.IOException;
+
+  public Token viewNextToken() throws java.io.IOException;
 }
