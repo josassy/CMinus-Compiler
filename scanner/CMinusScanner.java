@@ -288,12 +288,12 @@ public class CMinusScanner implements Scanner {
         // determine if <= or <
         case INLESS:
           state = StateType.DONE;
-          save = false;
           if (c == '=') {
             currentToken = new Token(TokenType.LEQ_TOKEN);
           }
           // step backwards
           else {
+            save = false;
             unGetChar();
             currentToken = new Token(TokenType.LESS_TOKEN);
           }
@@ -302,12 +302,12 @@ public class CMinusScanner implements Scanner {
         // determine if >= or >
         case INGREATER:
           state = StateType.DONE;
-          save = false;
           if (c == '=') {
             currentToken = new Token(TokenType.GEQ_TOKEN);
           }
           // step backwards
           else {
+            save = false;
             unGetChar();
             currentToken = new Token(TokenType.GREATER_TOKEN);
           }
