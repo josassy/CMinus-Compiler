@@ -6,8 +6,8 @@ type-specifier -> int | void
 fun-declaration -> type-specifier ID ( params ) compound-stmt
 params -> param-list | void
 param-list -> param { , param }
-param -> type-specifier ID [[ ]]
-compound-stmt -> { local-declarations statement-list } 
+param -> type-specifier ID ["[" "]"]
+compound-stmt -> "{" local-declarations statement-list "}" 
 local-declarations -> local-declarations var-declaration | empty
 statement-list -> { statement }
 statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt
@@ -24,6 +24,6 @@ addop -> + | -
 term -> factor { mulop factor }
 mulop -> * | /
 factor -> ( expression ) | var | call | NUM
-call -> ID "(" args ")"
+call -> ID ( args )
 args -> arg-list | empty
 arg-list -> expression { , expression }
