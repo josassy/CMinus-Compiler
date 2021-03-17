@@ -8,7 +8,7 @@ params -> param-list | void
 param-list -> param { , param }
 param -> type-specifier ID ["[" "]"]
 compound-stmt -> "{" local-declarations statement-list "}" 
-local-declarations -> local-declarations var-declaration | empty
+local-declarations -> { var-declaration }
 statement-list -> { statement }
 statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt
 expression-stmt -> [ expression ] ;
