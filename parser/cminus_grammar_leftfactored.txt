@@ -21,19 +21,16 @@ expression -> NUM simple-expression' | ( expression ) simple-expression' | ID ex
 expression' -> = expression | [ expression ] expression'' | ( args ) simple-expression' | simple-expression'
 expression'' -> = expression | simple-expression'
 simple-expression' -> additive-expression' [ relop additive-expression ]
-additive-expression' -> term' { addop term }
-term' -> { mulop factor }
-// var -> ID ["[" expression "]"]
-// simple-expression -> additive-expression [ relop additive-expression ]
 relop -> <= | < | > | >= | == | !=
 additive-expression -> term { addop term }
+additive-expression' -> term' { addop term }
 addop -> + | -
 term -> factor { mulop factor }
+term' -> { mulop factor }
 mulop -> * | /
 factor -> ( expression ) | ID factor' | NUM
 factor' -> var' | call'
 var' -> ["[" expression "]"]
 call' -> ( args )
-// call -> ID ( args )
 args -> arg-list | empty
 arg-list -> expression { , expression }
