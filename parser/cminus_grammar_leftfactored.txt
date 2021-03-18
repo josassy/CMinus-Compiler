@@ -1,14 +1,10 @@
-program -> declaration-list
-declaration-list -> declaration { declaration }
-declaration -> type-specifier ID declaration'
-declaration' -> var-declaration' | fun-declaration'
-var-declaration' -> ["[" NUM "]"] ;
+program -> declaration { declaration }
+declaration -> void ID fun-declaration' | int ID declaration'
+declaration' -> ; | "["NUM"]" ; | fun-declaration'
 fun-declaration' -> ( params ) compound-stmt
-var-declaration -> type-specifier ID ["[" NUM "]"] ; // do we need this?
-type-specifier -> int | void
 params -> param-list | void
 param-list -> param { , param }
-param -> type-specifier ID ["[" "]"]
+param -> int ID ["[" "]"]
 compound-stmt -> "{" local-declarations statement-list "}" 
 local-declarations -> { var-declaration }
 statement-list -> { statement }
@@ -29,8 +25,6 @@ term -> factor { mulop factor }
 term' -> { mulop factor }
 mulop -> * | /
 factor -> ( expression ) | ID factor' | NUM
-factor' -> var' | call'
-var' -> ["[" expression "]"]
-call' -> ( args )
+factor' -> ["[" expression "]"] | ( args ) | epsilon
 args -> arg-list | empty
 arg-list -> expression { , expression }
