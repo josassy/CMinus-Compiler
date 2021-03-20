@@ -1,12 +1,13 @@
 program -> declaration { declaration }
 declaration -> void ID fun-declaration' | int ID declaration'
-declaration' -> ; | "["NUM"]" ; | fun-declaration'
+declaration' -> var-declaration' | fun-declaration'
+var-declaration' -> [ "[" NUM "]" ] ;
 fun-declaration' -> ( params ) compound-stmt
 params -> param-list | void
 param-list -> param { , param }
 param -> int ID ["[" "]"]
 compound-stmt -> "{" local-declarations statement-list "}" 
-local-declarations -> { var-declaration }
+local-declarations -> { int ID var-declaration' }
 statement-list -> { statement }
 statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt
 expression-stmt -> [ expression ] ;
@@ -14,7 +15,7 @@ selection-stmt -> if ( expression ) statement [ else statement ]
 iteration-stmt -> while ( expression ) statement
 return-stmt -> return [ expression ] ;
 expression -> NUM simple-expression' | ( expression ) simple-expression' | ID expression'
-expression' -> = expression | [ expression ] expression'' | ( args ) simple-expression' | simple-expression'
+expression' -> = expression | [ expression ] expression'' | [ ( args ) ] simple-expression'
 expression'' -> = expression | simple-expression'
 simple-expression' -> additive-expression' [ relop additive-expression ]
 relop -> <= | < | > | >= | == | !=
@@ -25,6 +26,6 @@ term -> factor { mulop factor }
 term' -> { mulop factor }
 mulop -> * | /
 factor -> ( expression ) | ID factor' | NUM
-factor' -> ["[" expression "]"] | ( args ) | epsilon
-args -> arg-list | empty
+factor' -> "[" expression "]" | ( args ) | empty
+args -> [ arg-list ]
 arg-list -> expression { , expression }
