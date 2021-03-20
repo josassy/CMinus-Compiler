@@ -6,7 +6,7 @@ fun-declaration' -> ( params ) compound-stmt
 params -> param-list | void
 param-list -> param { , param }
 param -> int ID ["[" "]"]
-compound-stmt -> "{" local-declarations statement-list "}" 
+compound-stmt -> "{" local-declarations statement-list "}"
 local-declarations -> { int ID var-declaration' }
 statement-list -> { statement }
 statement -> expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt
