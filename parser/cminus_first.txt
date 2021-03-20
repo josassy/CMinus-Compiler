@@ -1,0 +1,31 @@
+first(program) = { void, int }
+first(declaration) = { void, int }
+first(declaration') = { [, ;, ( }
+first(var-declaration') = { [, ; }
+first(fun-declaration') = { ( }
+first(params) = { void, int }
+first(param-list) = { int }
+first(param) = { int }
+first(compound-stmt) = { { }
+first(local-declarations) = { int, empty }
+first(statement-list) = { [, {, if, while, return, empty }
+first(statement) = { [, {, if, while, return } 
+first(expression-stmt) = { [ }
+first(selection-stmt) = { if }
+first(iteration-stmt) = { while }
+first(return-stmt) = { return }
+first(expression) = { NUM, (, ID }
+first(expression') = { =, NUM, (, ID, *, /, empty }
+first(expression'') = { =, *, /, empty }
+first(simple-expression') = { *, /, empty }
+first(relop) = { <=, <, >, >=, ==, != }
+first(additive-expression) = { (, ID, NUM }
+first(additive-expression') = { *, /, empty }
+first(addop) = { +, - }
+first(term) = { (, ID, NUM }
+first(term') = { *, /, empty }
+first(mulop) = { *, / }
+first(factor) = { (, ID, NUM }
+first(factor') = { [, (, empty }
+first(args) = { NUM, (, ID, empty }
+first(arg-list) = { NUM, (, ID }
