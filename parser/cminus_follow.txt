@@ -1,0 +1,31 @@
+follow(program) = { $ }
+follow(declaration) = { void, int, $ }
+follow(declaration') = { void, int, $ }
+follow(var-declaration') = { void, int, $, [, "{", if, while, return, "}" }
+follow(fun-declaration') = { void, int, $ }
+follow(params) = { ) }
+follow(param-list) = { ) }
+follow(param) = { ",", ) }
+follow(compound-stmt) = { void, int, $, "}", else }
+follow(local-declarations) = { [, "{", if, while, return, "}" }
+follow(statement-list) = { "}" }
+follow(statement) = { "}", else }
+follow(expression-stmt) = { "}", else }
+follow(selection-stmt) = { "}", else }
+follow(iteration-stmt) = { "}", else }
+follow(return-stmt) = { "}", else }
+follow(expression) = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(expression') = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(expression'') = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(simple-expression') = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(relop) = { (, ID, NUM }
+follow(additive-expression) = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(additive-expression') = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(addop) = { (, ID, NUM }
+follow(term) = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(term') = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(mulop) = { (, ID, NUM }
+follow(factor) = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(factor') = { ;, ), =, *, /, +, -, <=, <, >, >=, ==, !=, ], "," }
+follow(args) = { ) }
+follow(arg-list) = { ) }
