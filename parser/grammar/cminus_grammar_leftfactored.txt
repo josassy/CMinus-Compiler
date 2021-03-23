@@ -15,7 +15,7 @@ selection-stmt -> if ( expression ) statement [ else statement ]
 iteration-stmt -> while ( expression ) statement
 return-stmt -> return [ expression ] ;
 expression -> NUM simple-expression' | ( expression ) simple-expression' | ID expression'
-expression' -> = expression | [ expression ] expression'' | [ ( args ) ] simple-expression'
+expression' -> = expression | "[" expression "]" expression'' | [ ( args ) ] simple-expression'
 expression'' -> = expression | simple-expression'
 simple-expression' -> additive-expression' [ relop additive-expression ]
 relop -> <= | < | > | >= | == | !=

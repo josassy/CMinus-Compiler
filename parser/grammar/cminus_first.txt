@@ -8,14 +8,14 @@ first(param-list) = { int }
 first(param) = { int }
 first(compound-stmt) = { "{" }
 first(local-declarations) = { int, empty }
-first(statement-list) = { [, "{", if, while, return, empty }
-first(statement) = { [, "{", if, while, return } 
-first(expression-stmt) = { [ }
+first(statement-list) = { NUM, (, ID, ;, "{", if, while, return, empty }
+first(statement) = { NUM, (, ID, ;, "{", if, while, return }
+first(expression-stmt) = { NUM, (, ID, ; }
 first(selection-stmt) = { if }
 first(iteration-stmt) = { while }
 first(return-stmt) = { return }
 first(expression) = { NUM, (, ID }
-first(expression') = { =, NUM, (, ID, *, /, empty }
+first(expression') = { =, [, (, *, /, empty }
 first(expression'') = { =, *, /, empty }
 first(simple-expression') = { *, /, empty }
 first(relop) = { <=, <, >, >=, ==, != }

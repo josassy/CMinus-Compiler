@@ -27,8 +27,7 @@
 
 - expression (parent)
 - assign expression
-    - ID
-    - accessor (expression) (nullable)
+    - ve (VarExpr)
     - rhs (expression)
 - binaryExpr (covers additive expression, simple expression, and term)
     - lhs (expression)
