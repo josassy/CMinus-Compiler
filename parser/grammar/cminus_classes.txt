@@ -30,6 +30,29 @@
     - ID
     - accessor (expression) (nullable)
     - rhs (expression)
+- binaryExpr (covers additive expression, simple expression, and term)
+    - lhs (expression)
+    - rhs (expression)
+    - operator
+- callExpr
+    - ID
+    - args (ArrayList<Expression>)
+- numExpr
+    - Integer
+- varExpr
+    - ID
+    - Index (expression) (optional)
+
+- program
+    - declarations ArrayList<declarations>
+
+
+-param
+    - ID
+    - brackets (boolean) (optional)
+
+
+WRONG
 - simple expression
     - lhs (additive expression)
     - operator (nullable)
@@ -45,14 +68,5 @@
 - factor
     - expression (nullable)
     - ID (nullable)
-    - args (ArrayList<Expression>) (nullable)
+    `- args (ArrayList<Expression>) (nullable)`
     - NUM (nullable)
-
-
-- program
-    - declarations ArrayList<declarations>
-
-
--param
-    - ID
-    - brackets (boolean) (optional)
