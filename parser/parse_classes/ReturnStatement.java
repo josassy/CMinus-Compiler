@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: ReturnStatement.java
@@ -14,8 +15,8 @@ public class ReturnStatement extends Statement {
         this.expr = expr;
     }
 
-    public void Print(int indent) {
-        ParseUtility.IndentedPrintln("return", indent);
-        expr.Print(indent + 1);
+    public void Print(Writer out, int indent) {
+        ParseUtility.IndentedPrintln("return", indent, out);
+        expr.Print(out, indent + 1);
     }
 }

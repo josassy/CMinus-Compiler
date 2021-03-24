@@ -1,5 +1,7 @@
 package parser.parse_classes;
 
+import java.io.Writer;
+
 /**
  * File: ParseClass.java
  * 
@@ -7,5 +9,5 @@ package parser.parse_classes;
  * Print() function to print the AST.
  */
 public interface ParseClass {
-  public void Print(int indent);
+  public void Print(Writer out, int indent);
 }

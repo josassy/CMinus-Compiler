@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import java.util.ArrayList;
+import java.io.Writer;
 
 /**
  * File: Program.java
@@ -16,9 +17,9 @@ public class Program implements ParseClass {
     this.decls = decls;
   }
 
-  public void Print(int indent) {
+  public void Print(Writer out, int indent) {
     for (Declaration d : decls) {
-      d.Print(indent);
+      d.Print(out, indent);
     }
   }
 }

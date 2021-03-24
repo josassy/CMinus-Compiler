@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import parser.ParseUtility;
 import scanner.Token;
+import java.io.Writer;
 
 /**
  * File: FunDeclaration.java
@@ -21,17 +22,17 @@ public class FunDeclaration extends Declaration {
         this.cs = cs;
     }
 
-    public void Print(int indent) {
-        ParseUtility.IndentedPrintln(type.getData().toString() + " " + id.toString() + "(", indent);
+    public void Print(Writer out, int indent) {
+        ParseUtility.IndentedPrintln(type.getData().toString() + " " + id.toString() + "(", indent, out);
         if (params != null) {
             for (Param currParam : params) {
-                currParam.Print(indent + 1);
+                currParam.Print(out, indent + 1);
             }
         } else {
-            ParseUtility.IndentedPrintln("void", indent + 1);
+            ParseUtility.IndentedPrintln("void", indent + 1, out);
         }
-        ParseUtility.IndentedPrintln(")", indent);
+        ParseUtility.IndentedPrintln(")", indent, out);
 
-        cs.Print(indent + 1);
+        cs.Print(out, indent + 1);
     }
 }

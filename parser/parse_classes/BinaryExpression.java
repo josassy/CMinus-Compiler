@@ -2,6 +2,7 @@ package parser.parse_classes;
 
 import scanner.Token;
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: BinaryExpression.java
@@ -20,9 +21,9 @@ public class BinaryExpression extends Expression {
         this.operator = operator;
     }
 
-    public void Print(int indent) {
-        ParseUtility.IndentedPrintln(operator.getData().toString(), indent);
-        lhs.Print(indent + 1);
-        rhs.Print(indent + 1);
+    public void Print(Writer out, int indent) {
+        ParseUtility.IndentedPrintln(operator.getData().toString(), indent, out);
+        lhs.Print(out, indent + 1);
+        rhs.Print(out, indent + 1);
     }
 }

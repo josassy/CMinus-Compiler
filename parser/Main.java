@@ -18,7 +18,7 @@ public class Main {
     String fileStub = "27";
 
     try {
-      File outFile = new File(fileStub + ".out");
+      File outFile = new File(fileStub + ".ast");
       outFile.createNewFile();
       out = new FileWriter(outFile);
     } catch (IOException e) {
@@ -37,7 +37,7 @@ public class Main {
       CMinusScanner scanner = new CMinusScanner(inFile);
       CMinusParser parser = new CMinusParser(scanner);
       Program p = parser.parseProgram();
-      p.Print(0);
+      p.Print(out, 0);
 
     } catch (ParseException e) {
       System.out.println("ParseException: " + e.toString());

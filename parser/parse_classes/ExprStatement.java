@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: ExprStatement.java
@@ -15,10 +16,10 @@ public class ExprStatement extends Statement {
         this.expr = expr;
     }
 
-    public void Print(int indent) {
-        ParseUtility.IndentedPrintln(";", indent);
+    public void Print(Writer out, int indent) {
+        ParseUtility.IndentedPrintln(";", indent, out);
         if (expr != null) {
-            expr.Print(indent + 1);
+            expr.Print(out, indent + 1);
         }
     }
 }

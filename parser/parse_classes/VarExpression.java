@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: VarExpression.java
@@ -22,13 +23,13 @@ public class VarExpression extends Expression {
     this.id = id;
   }
 
-  public void Print(int indent) {
+  public void Print(Writer out, int indent) {
     if (index == null) {
-      ParseUtility.IndentedPrintln(id, indent);
+      ParseUtility.IndentedPrintln(id, indent, out);
     } else {
-      ParseUtility.IndentedPrintln(id + "[", indent);
-      index.Print(indent + 1);
-      ParseUtility.IndentedPrintln("]", indent);
+      ParseUtility.IndentedPrintln(id + "[", indent, out);
+      index.Print(out, indent + 1);
+      ParseUtility.IndentedPrintln("]", indent, out);
     }
   }
 }

@@ -2,6 +2,7 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 import java.util.ArrayList;
+import java.io.Writer;
 
 /**
  * File: CallExpression.java
@@ -24,13 +25,13 @@ public class CallExpression extends Expression {
     this.args = null;
   }
 
-  public void Print(int indent) {
-    ParseUtility.IndentedPrintln(id + "(", indent);
+  public void Print(Writer out, int indent) {
+    ParseUtility.IndentedPrintln(id + "(", indent, out);
     if (args != null) {
       for (Expression e : args) {
-        e.Print(indent + 1);
+        e.Print(out, indent + 1);
       }
     }
-    ParseUtility.IndentedPrintln(")", indent);
+    ParseUtility.IndentedPrintln(")", indent, out);
   }
 }

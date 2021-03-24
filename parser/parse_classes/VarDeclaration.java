@@ -2,6 +2,7 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 import scanner.Token;
+import java.io.Writer;
 
 /**
  * File: VarDeclaration.java
@@ -22,7 +23,7 @@ public class VarDeclaration extends Declaration {
         this.size = -1;
     }
 
-    public void Print(int indent) {
+    public void Print(Writer out, int indent) {
         StringBuilder sb = new StringBuilder();
         sb.append(type.getData().toString());
         sb.append(" ");
@@ -30,6 +31,6 @@ public class VarDeclaration extends Declaration {
         if (size >= 0) {
             sb.append("[" + size + "]");
         }
-        ParseUtility.IndentedPrintln(sb.toString(), indent);
+        ParseUtility.IndentedPrintln(sb.toString(), indent, out);
     }
 }

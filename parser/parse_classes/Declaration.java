@@ -2,6 +2,7 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 import scanner.Token;
+import java.io.Writer;
 
 /**
  * File: Declaration.java
@@ -18,7 +19,7 @@ public class Declaration implements ParseClass {
     this.id = id;
   }
 
-  public void Print(int indent) {
-    ParseUtility.IndentedPrintln(type.getData().toString() + " " + id, indent);
+  public void Print(Writer out, int indent) {
+    ParseUtility.IndentedPrintln(type.getData().toString() + " " + id, indent, out);
   }
 }

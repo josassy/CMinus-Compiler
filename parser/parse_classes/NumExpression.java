@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: VarDeclaration.java
@@ -14,7 +15,7 @@ public class NumExpression extends Expression {
         this.num = num;
     }
 
-    public void Print(int indent) {
-        ParseUtility.IndentedPrintln(Integer.toString(num), indent);
+    public void Print(Writer out, int indent) {
+        ParseUtility.IndentedPrintln(Integer.toString(num), indent, out);
     }
 }

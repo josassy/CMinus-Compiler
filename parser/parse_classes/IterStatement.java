@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: IterStatement.java
@@ -18,11 +19,11 @@ public class IterStatement extends Statement {
         this.stmt = stmt;
     }
 
-    public void Print(int indent) {
-        ParseUtility.IndentedPrintln("while", indent);
-        ParseUtility.IndentedPrintln("(", indent + 1);
-        expr.Print(indent + 2);
-        ParseUtility.IndentedPrintln(")", indent + 1);
-        stmt.Print(indent + 1);
+    public void Print(Writer out, int indent) {
+        ParseUtility.IndentedPrintln("while", indent, out);
+        ParseUtility.IndentedPrintln("(", indent + 1, out);
+        expr.Print(out, indent + 2);
+        ParseUtility.IndentedPrintln(")", indent + 1, out);
+        stmt.Print(out, indent + 1);
     }
 }

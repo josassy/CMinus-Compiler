@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: Param.java
@@ -18,12 +19,12 @@ public class Param implements ParseClass {
     this.hasBrackets = hasBrackets;
   }
 
-  public void Print(int indent) {
+  public void Print(Writer out, int indent) {
     StringBuilder sb = new StringBuilder();
     sb.append("int " + id);
     if (hasBrackets) {
       sb.append("[]");
     }
-    ParseUtility.IndentedPrintln(sb.toString(), indent);
+    ParseUtility.IndentedPrintln(sb.toString(), indent, out);
   }
 }

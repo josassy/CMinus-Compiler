@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: VarDeclaration.java
@@ -27,14 +28,14 @@ public class SelectStatement extends Statement {
         this.elseStmt = null;
     }
 
-    public void Print(int indent) {
-        ParseUtility.IndentedPrintln("if (", indent);
-        expr.Print(indent + 1);
-        ParseUtility.IndentedPrintln(")", indent);
-        stmt.Print(indent + 1);
+    public void Print(Writer out, int indent) {
+        ParseUtility.IndentedPrintln("if (", indent, out);
+        expr.Print(out, indent + 1);
+        ParseUtility.IndentedPrintln(")", indent, out);
+        stmt.Print(out, indent + 1);
         if (elseStmt != null) {
-            ParseUtility.IndentedPrintln("else", indent);
-            elseStmt.Print(indent + 1);
+            ParseUtility.IndentedPrintln("else", indent, out);
+            elseStmt.Print(out, indent + 1);
         }
     }
 }

@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import java.io.Writer;
 
 /**
  * File: AssignExpression.java
@@ -17,9 +18,9 @@ public class AssignExpression extends Expression {
     this.rhs = rhs;
   }
 
-  public void Print(int indent) {
-    ParseUtility.IndentedPrintln("=", indent);
-    ve.Print(indent + 1);
-    rhs.Print(indent + 1);
+  public void Print(Writer out, int indent) {
+    ParseUtility.IndentedPrintln("=", indent, out);
+    ve.Print(out, indent + 1);
+    rhs.Print(out, indent + 1);
   }
 }
