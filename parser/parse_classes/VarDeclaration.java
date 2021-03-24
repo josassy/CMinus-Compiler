@@ -7,25 +7,25 @@ import scanner.Token;
 public class VarDeclaration extends Declaration {
     int size;
 
-    public VarDeclaration(String id, int size) {
-        super(Token.TokenType.INT_TOKEN, id);
+    public VarDeclaration(String id, Token type, int size) {
+        super(type, id);
         this.size = size;
     }
 
-    public VarDeclaration(String id) {
-        super(Token.TokenType.INT_TOKEN, id);
+    public VarDeclaration(String id, Token type) {
+        super(type, id);
         this.size = -1;
     }
 
     public void Print(int indent) {
-        ParseUtility.IndentedPrintln("VarDeclaration", indent);
-        ParseUtility.IndentedPrintln(type.toString(), indent+1);
-        ParseUtility.IndentedPrintln(id.toString(), indent+1);
+        StringBuilder sb = new StringBuilder();
+        sb.append(type.getData().toString());
+        sb.append(" ");
+        sb.append(id.toString());
         if (size >= 0) {
-            ParseUtility.IndentedPrintln("[", indent+1);
-            ParseUtility.IndentedPrintln(Integer.toString(size), indent+2);
-            ParseUtility.IndentedPrintln("]", indent+1);
+            sb.append("[" + size + "]");
         }
+        ParseUtility.IndentedPrintln(sb.toString(), indent);
     }
 
     public int getSize() {

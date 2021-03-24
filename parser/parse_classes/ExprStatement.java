@@ -10,7 +10,7 @@ public class ExprStatement extends Statement {
     }
 
     public void Print(int indent) {
-        ParseUtility.IndentedPrintln("ExprStmt", indent);
+        ParseUtility.IndentedPrintln(";", indent);
         if (expr != null) {
             expr.Print(indent+1);
         }

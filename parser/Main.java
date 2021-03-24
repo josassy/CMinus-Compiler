@@ -15,7 +15,7 @@ public class Main {
     FileReader in = null;
     FileWriter out = null;
 
-    String fileStub = "quicksort_modified";
+    String fileStub = "27";
 
     try {
       File outFile = new File(fileStub + ".out");

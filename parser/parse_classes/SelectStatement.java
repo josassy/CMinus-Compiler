@@ -20,8 +20,9 @@ public class SelectStatement extends Statement {
     }
 
     public void Print(int indent) {
-        ParseUtility.IndentedPrintln("if", indent);
+        ParseUtility.IndentedPrintln("if (", indent);
         expr.Print(indent+1);
+        ParseUtility.IndentedPrintln(")", indent);
         stmt.Print(indent+1);
         if (elseStmt != null){
             ParseUtility.IndentedPrintln("else", indent);

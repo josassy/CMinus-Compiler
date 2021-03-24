@@ -9,14 +9,14 @@ public class FunDeclaration extends Declaration {
     ArrayList<Param> params;
     Statement cs;
 
-    public FunDeclaration(Token.TokenType type, String id, ArrayList<Param> params, Statement cs) {
+    public FunDeclaration(Token type, String id, ArrayList<Param> params, Statement cs) {
         super(type, id);
         this.params = params;
         this.cs = cs;
     }
 
     public void Print(int indent) {
-        ParseUtility.IndentedPrintln(type.toString() + " " + id.toString() + "(", indent);
+        ParseUtility.IndentedPrintln(type.getData().toString() + " " + id.toString() + "(", indent);
         if (params != null) {
             for (Param currParam : params) {
                 currParam.Print(indent + 1);

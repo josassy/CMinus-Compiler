@@ -56,14 +56,14 @@ public class CMinusParser {
     // var-decl
     case OBRACKET_TOKEN:
     case SEMICOLON_TOKEN:
-      return parseVarDeclarationP(id_token);
+      return parseVarDeclarationP(type_token, id_token);
     // error
     default:
       throw new ParseException("parseDeclarationP", TokenType.OPAREN_TOKEN, token.getType());
     }
   }
 
-  private Declaration parseVarDeclarationP(Token id_token) throws ParseException {
+  private Declaration parseVarDeclarationP(Token type_token, Token id_token) throws ParseException {
     Token token = scanner.viewNextToken();
     // parse the int accessor
     if (token.getType() == TokenType.OBRACKET_TOKEN) {
@@ -74,10 +74,10 @@ public class CMinusParser {
       int size = Integer.parseInt(numData.toString());
       handledMatch("parseVarDeclarationP", TokenType.CBRACKET_TOKEN);
       handledMatch("parseVarDeclarationP", TokenType.SEMICOLON_TOKEN);
-      return new VarDeclaration(id_token.getData().toString(), size);
+      return new VarDeclaration(id_token.getData().toString(), type_token, size);
     } else {
       handledMatch("parseVarDeclarationP", TokenType.SEMICOLON_TOKEN);
-      return new VarDeclaration(id_token.getData().toString());
+      return new VarDeclaration(id_token.getData().toString(), type_token);
     }
   }
 
@@ -109,7 +109,7 @@ public class CMinusParser {
 
     Statement cs = parseCompStatement();
 
-    return new FunDeclaration(type_token.getType(), id_token.getData().toString(), params, cs);
+    return new FunDeclaration(type_token, id_token.getData().toString(), params, cs);
   }
 
   private Expression parseExpression() throws ParseException {
@@ -223,7 +223,7 @@ public class CMinusParser {
       if (isRelop(scanner.viewNextToken().getType())) {
         Token relopToken = scanner.getNextToken();
         Expression relopRhs = parseAdditiveExpression();
-        return new BinaryExpression(relopLhs, relopRhs, relopToken.getType());
+        return new BinaryExpression(relopLhs, relopRhs, relopToken);
       } else {
         // no relop, so just return the lhs
         return relopLhs;
@@ -234,7 +234,7 @@ public class CMinusParser {
       // relop additive expression
       Token relopToken = scanner.getNextToken();
       Expression rhs = parseAdditiveExpression();
-      return new BinaryExpression(lhs, rhs, relopToken.getType());
+      return new BinaryExpression(lhs, rhs, relopToken);
     }
 
     else {
@@ -258,7 +258,7 @@ public class CMinusParser {
     while (isAddop(scanner.viewNextToken().getType())) {
       Token addopToken = scanner.getNextToken();
       Expression rhs = parseTerm();
-      lhs = new BinaryExpression(lhs, rhs, addopToken.getType());
+      lhs = new BinaryExpression(lhs, rhs, addopToken);
     }
     return lhs;
   }
@@ -268,7 +268,7 @@ public class CMinusParser {
     while (isAddop(scanner.viewNextToken().getType())) {
       Token addopToken = scanner.getNextToken();
       Expression rhs = parseTerm();
-      termLhs = new BinaryExpression(termLhs, rhs, addopToken.getType());
+      termLhs = new BinaryExpression(termLhs, rhs, addopToken);
     }
     return termLhs;
   }
@@ -278,7 +278,7 @@ public class CMinusParser {
     while (isMulop(scanner.viewNextToken().getType())) {
       Token mulopToken = scanner.getNextToken();
       Expression rhs = parseFactor();
-      lhs = new BinaryExpression(lhs, rhs, mulopToken.getType());
+      lhs = new BinaryExpression(lhs, rhs, mulopToken);
     }
     return lhs;
   }
@@ -287,7 +287,7 @@ public class CMinusParser {
     while (isMulop(scanner.viewNextToken().getType())) {
       Token mulopToken = scanner.getNextToken();
       Expression rhs = parseFactor();
-      lhs = new BinaryExpression(lhs, rhs, mulopToken.getType());
+      lhs = new BinaryExpression(lhs, rhs, mulopToken);
     }
     return lhs;
   }

@@ -10,8 +10,8 @@ public class ReturnStatement extends Statement {
     }
 
     public void Print(int indent) {
-        String temp = "return " + expr;
-        ParseUtility.IndentedPrintln(temp, indent);
+        ParseUtility.IndentedPrintln("return", indent);
+        expr.Print(indent+1);
       }
 
     public Expression getExpr() {

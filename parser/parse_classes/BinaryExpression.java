@@ -1,20 +1,20 @@
 package parser.parse_classes;
 
-import scanner.Token.*;
+import scanner.Token;
 import parser.ParseUtility;
 public class BinaryExpression extends Expression {
     Expression lhs;
     Expression rhs;
-    TokenType operator;
+    Token operator;
 
-    public BinaryExpression(Expression lhs, Expression rhs, TokenType operator) {
+    public BinaryExpression(Expression lhs, Expression rhs, Token operator) {
         this.lhs = lhs;
         this.rhs = rhs;
         this.operator = operator;
     }
 
     public void Print(int indent) {
-        ParseUtility.IndentedPrintln(operator.toString(), indent);
+        ParseUtility.IndentedPrintln(operator.getData().toString(), indent);
         lhs.Print(indent + 1);
         rhs.Print(indent + 1);
     }
@@ -27,7 +27,7 @@ public class BinaryExpression extends Expression {
         return rhs;
     }
 
-    public TokenType getOperator() {
+    public Token getOperator() {
         return operator;
     }
 }
