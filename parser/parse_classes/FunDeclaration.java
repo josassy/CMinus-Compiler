@@ -23,15 +23,16 @@ public class FunDeclaration extends Declaration {
     }
 
     public void Print(Writer out, int indent) {
-        ParseUtility.IndentedPrintln(type.getData().toString() + " " + id.toString() + "(", indent, out);
+        ParseUtility.IndentedPrintln(type.getData().toString() + " " + id.toString(), indent, out);
+        ParseUtility.IndentedPrintln("(", indent + 1, out);
         if (params != null) {
             for (Param currParam : params) {
-                currParam.Print(out, indent + 1);
+                currParam.Print(out, indent + 2);
             }
         } else {
-            ParseUtility.IndentedPrintln("void", indent + 1, out);
+            ParseUtility.IndentedPrintln("void", indent + 2, out);
         }
-        ParseUtility.IndentedPrintln(")", indent, out);
+        ParseUtility.IndentedPrintln(")", indent + 1, out);
 
         cs.Print(out, indent + 1);
     }

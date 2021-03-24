@@ -27,9 +27,10 @@ public class VarExpression extends Expression {
     if (index == null) {
       ParseUtility.IndentedPrintln(id, indent, out);
     } else {
-      ParseUtility.IndentedPrintln(id + "[", indent, out);
-      index.Print(out, indent + 1);
-      ParseUtility.IndentedPrintln("]", indent, out);
+      ParseUtility.IndentedPrintln(id, indent, out);
+      ParseUtility.IndentedPrintln("[", indent + 1, out);
+      index.Print(out, indent + 2);
+      ParseUtility.IndentedPrintln("]", indent + 1, out);
     }
   }
 }

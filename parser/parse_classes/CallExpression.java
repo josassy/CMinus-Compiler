@@ -26,12 +26,14 @@ public class CallExpression extends Expression {
   }
 
   public void Print(Writer out, int indent) {
-    ParseUtility.IndentedPrintln(id + "(", indent, out);
-    if (args != null) {
+    if (args != null && !args.isEmpty()) {
+      ParseUtility.IndentedPrintln(id + "(", indent, out);
       for (Expression e : args) {
         e.Print(out, indent + 1);
       }
+      ParseUtility.IndentedPrintln(")", indent, out);
+    } else {
+      ParseUtility.IndentedPrintln(id + "()", indent, out);
     }
-    ParseUtility.IndentedPrintln(")", indent, out);
   }
 }
