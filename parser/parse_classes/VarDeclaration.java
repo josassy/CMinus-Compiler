@@ -1,9 +1,14 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
-
 import scanner.Token;
 
+/**
+ * File: VarDeclaration.java
+ * 
+ * Represent a declaration of an int variable in C- with an optional array size
+ * parameter.
+ */
 public class VarDeclaration extends Declaration {
     int size;
 
@@ -26,9 +31,5 @@ public class VarDeclaration extends Declaration {
             sb.append("[" + size + "]");
         }
         ParseUtility.IndentedPrintln(sb.toString(), indent);
-    }
-
-    public int getSize() {
-        return size;
     }
 }
