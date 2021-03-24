@@ -1,27 +1,36 @@
 package parser.parse_classes;
 
+import parser.ParseUtility;
+
 public class VarExpression extends Expression {
-    String id;
-    Expression index;
+  String id;
+  Expression index;
 
-    public VarExpression(String id, Expression index) {
-        this.id = id;
-        this.index = index;
+  public VarExpression(String id, Expression index) {
+    this.id = id;
+    this.index = index;
+  }
+
+  public VarExpression(String id) {
+    this.id = id;
+  }
+
+  public void Print(int indent) {
+    if (index == null) {
+      ParseUtility.IndentedPrintln(id, indent);
     }
-
-    public VarExpression(String id) {
-        this.id = id;
+    else {
+      ParseUtility.IndentedPrintln(id + "[", indent);
+      index.Print(indent+1);
+      ParseUtility.IndentedPrintln("]", indent);
     }
+  }
 
-    public void Print() {
-        System.out.println("I'm a VarExpression");
-      }
+  public String getID() {
+    return id;
+  }
 
-    public String getID() {
-        return id;
-    }
-
-    public Expression getIndex() {
-        return index;
-    }
+  public Expression getIndex() {
+    return index;
+  }
 }

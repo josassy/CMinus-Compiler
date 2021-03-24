@@ -1,5 +1,7 @@
 package parser.parse_classes;
 
+import parser.ParseUtility;
+
 public class Param implements ParseClass {
   String id;
   Boolean hasBrackets;
@@ -9,8 +11,13 @@ public class Param implements ParseClass {
     this.hasBrackets = hasBrackets;
   }  
 
-  public void Print() {
-    System.out.println("I'm a Param");
+  public void Print(int indent) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(id);
+    if (hasBrackets) {
+      sb.append("[]");
+    }
+    ParseUtility.IndentedPrintln(sb.toString(), indent);
   }
 
   public String getID() {

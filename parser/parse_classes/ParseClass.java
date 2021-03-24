@@ -6,5 +6,5 @@ package parser.parse_classes;
  */
 
 public interface ParseClass {
-  public void Print();
+  public void Print(int indent);
 }

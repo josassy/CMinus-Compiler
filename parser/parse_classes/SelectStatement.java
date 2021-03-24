@@ -1,5 +1,7 @@
 package parser.parse_classes;
 
+import parser.ParseUtility;
+
 public class SelectStatement extends Statement {
     Expression expr;
     Statement stmt;
@@ -17,8 +19,14 @@ public class SelectStatement extends Statement {
         this.elseStmt = null;
     }
 
-    public void Print() {
-        System.out.println("I'm a SelectStatement");
+    public void Print(int indent) {
+        ParseUtility.IndentedPrintln("if", indent);
+        expr.Print(indent+1);
+        stmt.Print(indent+1);
+        if (elseStmt != null){
+            ParseUtility.IndentedPrintln("else", indent);
+            elseStmt.Print(indent+1);
+        }
     }
 
     public Expression getExpr() {

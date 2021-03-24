@@ -1,5 +1,7 @@
 package parser.parse_classes;
 
+import parser.ParseUtility;
+
 public class ReturnStatement extends Statement {
     Expression expr;
 
@@ -7,8 +9,9 @@ public class ReturnStatement extends Statement {
         this.expr = expr;
     }
 
-    public void Print() {
-        System.out.println("I'm a ReturnStatement");
+    public void Print(int indent) {
+        String temp = "return " + expr;
+        ParseUtility.IndentedPrintln(temp, indent);
       }
 
     public Expression getExpr() {

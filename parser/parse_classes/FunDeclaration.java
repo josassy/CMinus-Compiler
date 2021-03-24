@@ -2,6 +2,7 @@ package parser.parse_classes;
 
 import java.util.ArrayList;
 
+import parser.ParseUtility;
 import scanner.Token;
 
 public class FunDeclaration extends Declaration {
@@ -14,10 +15,19 @@ public class FunDeclaration extends Declaration {
         this.cs = cs;
     }
 
-    public void Print() {
-        System.out.println("I'm a FunDeclaration");
-      }
+    public void Print(int indent) {
+        ParseUtility.IndentedPrintln("FunDeclaration", indent);
+        ParseUtility.IndentedPrintln(type.toString(), indent+1);
+        ParseUtility.IndentedPrintln(id.toString(), indent+1);
+        ParseUtility.IndentedPrintln("{", indent+1);
+        for (Param currParam : params) {
+            currParam.Print(indent+2);
+        }
+        ParseUtility.IndentedPrintln("}", indent+1);
 
+        cs.Print(indent+1);
+      }
+    
     public ArrayList<Param> getParams() {
         return params;
     }

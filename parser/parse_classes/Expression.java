@@ -1,8 +1,6 @@
 package parser.parse_classes;
 
-public class Expression implements ParseClass {
+public abstract class Expression implements ParseClass {
+// this class is just used for identity purposes, so it can remain empty
 
-  public void Print() {
-    System.out.println("I'm an Expression");
-  }
 }

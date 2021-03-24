@@ -1,25 +1,33 @@
 package parser.parse_classes;
 
+import parser.ParseUtility;
 import java.util.ArrayList;
 
 public class CompStatement extends Statement {
-    ArrayList<Declaration> decls;
-    ArrayList<Statement> stmts;
+  ArrayList<Declaration> decls;
+  ArrayList<Statement> stmts;
 
-    public CompStatement(ArrayList<Declaration> decls, ArrayList<Statement> stmts) {
-        this.decls = decls;
-        this.stmts = stmts;
+  public CompStatement(ArrayList<Declaration> decls, ArrayList<Statement> stmts) {
+    this.decls = decls;
+    this.stmts = stmts;
+  }
+
+  public void Print(int indent) {
+    ParseUtility.IndentedPrintln("{", indent);
+    for (Declaration d : decls) {
+      d.Print(indent+1);
     }
-
-    public void Print() {
-        System.out.println("I'm a CompStatement");
-      }
-
-    public ArrayList<Declaration> getDecls() {
-        return decls;
+    for (Statement s : stmts) {
+      s.Print(indent+1);
     }
+    ParseUtility.IndentedPrintln("}", indent);
+  }
 
-    public ArrayList<Statement> getStmts() {
-        return stmts;
-    }
+  public ArrayList<Declaration> getDecls() {
+    return decls;
+  }
+
+  public ArrayList<Statement> getStmts() {
+    return stmts;
+  }
 }

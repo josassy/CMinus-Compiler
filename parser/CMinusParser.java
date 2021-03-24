@@ -10,9 +10,26 @@ public class CMinusParser {
 
   CMinusScanner scanner;
 
-  public void parseProgram() {
-    // parse one or more decl's, put em in a list
+  public CMinusParser(CMinusScanner scanner) {
+    this.scanner = scanner;
+  }
 
+  public ArrayList<Declaration> parseProgram() throws ParseException {
+    ArrayList<Declaration> decls = new ArrayList<Declaration>();
+    
+    while (scanner.viewNextToken().getType() != TokenType.EOF) {
+      switch (scanner.viewNextToken().getType()) {
+        case VOID_TOKEN:
+        case INT_TOKEN:
+          Declaration decl = parseDeclaration();
+          decls.add(decl);
+          break;
+        default:
+          throw new ParseException("ParseProgram", TokenType.INT_TOKEN, scanner.viewNextToken().getType());
+      }
+    }
+    
+    return decls;
   }
 
   private Declaration parseDeclaration() throws ParseException {
@@ -69,9 +86,13 @@ public class CMinusParser {
     handledMatch("parseFunDeclaration", TokenType.OPAREN_TOKEN);
     
     ArrayList<Param> params = new ArrayList<Param>();
+    params.add(parseParam());
 
     //Keep adding params until the close paren is encountered
     while (scanner.viewNextToken().getType() != TokenType.CPAREN_TOKEN) {
+      if (scanner.viewNextToken().getType() == TokenType.COMMA_TOKEN) {
+        handledMatch("ParseFunDeclaration", TokenType.COMMA_TOKEN);
+      }
       params.add(parseParam());
     }
 
@@ -82,6 +103,8 @@ public class CMinusParser {
     return new FunDeclaration(type_token.getType(), id_token.getData().toString(), params, cs);
   }
 
+  private Declaration parseParams()
+
   private Expression parseExpression() throws ParseException {
     Token token = scanner.getNextToken();
     switch(token.getType()) {
@@ -89,12 +112,12 @@ public class CMinusParser {
         // capture num and parse simple expression
         int num = Integer.parseInt(token.getData().toString());
         NumExpression numExpr = new NumExpression(num);
-        return parseSimpleExpression(numExpr);
+        return parseSimpleExpressionP(numExpr);
       case OPAREN_TOKEN:
         // capture expression and parse simple expression
         Expression lhs = parseExpression();
         handledMatch("parseExpression", TokenType.CPAREN_TOKEN);
-        return parseSimpleExpression(lhs);
+        return parseSimpleExpressionP(lhs);
       case ID_TOKEN:
         return parseExpressionP(token);
       default:
@@ -102,53 +125,198 @@ public class CMinusParser {
     }
   }
   
-  private Expression parseExpressionP(Token id_token) {
-    Token token = scanner.getNextToken();
+  private Expression parseExpressionP(Token id_token) throws ParseException {
+    Token token = scanner.viewNextToken();
     switch(token.getType()) {
       // first set
       case ASSIGN_TOKEN:
+        handledMatch("parseExpressionP", TokenType.ASSIGN_TOKEN);
+        Expression rh = parseExpression();
+        VarExpression lh = new VarExpression(id_token.getData().toString());
+        return new AssignExpression(lh, rh);
       case OBRACKET_TOKEN:
+        handledMatch("parseExpressionP", TokenType.OBRACKET_TOKEN);
+        Expression accessor = parseExpression();
+        handledMatch("parseExpressionP", TokenType.CBRACKET_TOKEN);
+        return parseExpressionPP(id_token, accessor);        
       case OPAREN_TOKEN:
+        // call expression is lhs of binary expression
+        handledMatch("parseExpressionP", TokenType.OPAREN_TOKEN);
+        ArrayList<Expression> args = parseArgs();
+        handledMatch("parseExpressionP", TokenType.CPAREN_TOKEN);
+        String id_string = id_token.getData().toString();
+        CallExpression callExpression = new CallExpression(id_string, args);
+        return parseSimpleExpressionP(callExpression);
       case MULT_TOKEN:
       case DIV_TOKEN:
-      case ADD_TOKEN:
+      case PLUS_TOKEN:
       case MINUS_TOKEN:
-      
-      // follow set
-      case SEMICOLON_TOKEN:
-      case CBRACKET_TOKEN:
-      // case ASSIGN_TOKEN:
-      // these are in the first set, so don't include
-      // case MULT_TOKEN:
-      // case DIV_TOKEN:
-      // case ADD_TOKEN:
       case LEQ_TOKEN:
       case LESS_TOKEN:
       case GREATER_TOKEN:
       case GEQ_TOKEN:
       case EQL_TOKEN:
       case NEQ_TOKEN:
+        String id_string2 = id_token.getData().toString();
+        VarExpression varExpression = new VarExpression(id_string2);
+        return parseSimpleExpressionP(varExpression);
+      
+      // follow set if expression' goes to empty
+      case SEMICOLON_TOKEN:
+      case CPAREN_TOKEN:
       case CBRACKET_TOKEN:
-      case COMMA_TOKEN:      
+      case COMMA_TOKEN:
+        return null;
+
+      default:
+        throw new ParseException("ParseExpressionP", TokenType.ASSIGN_TOKEN, token.getType());   
     }
   }
 
-  private Expression parseSimpleExpression(Expression lhs) {
-    Token token = scanner.getNextToken();
-    switch(token.getType()) {
+  private Expression parseExpressionPP(Token id_token, Expression accessor) throws ParseException {
+    
+    Token token = scanner.viewNextToken();
+    // either of the non-terms will accept a varExpression
+    VarExpression varExpression = new VarExpression(id_token.getData().toString(), accessor);
+    switch (token.getType()) {
+
+      case ASSIGN_TOKEN:
+        handledMatch("parseExpressionPP", TokenType.ASSIGN_TOKEN);
+        Expression rhs = parseExpression();
+        return new AssignExpression(varExpression, rhs);
       case MULT_TOKEN:
       case DIV_TOKEN:
-      //additive expression prime
-
+      case PLUS_TOKEN:
+      case MINUS_TOKEN:
       case LEQ_TOKEN:
       case LESS_TOKEN:
       case GREATER_TOKEN:
       case GEQ_TOKEN:
       case EQL_TOKEN:
       case NEQ_TOKEN:
-      //relop additive expression
+        return parseSimpleExpressionP(varExpression);
 
-      
+      // follow set if expression'' goes to empty
+      case SEMICOLON_TOKEN:
+      case CPAREN_TOKEN:
+      case CBRACKET_TOKEN:
+      case COMMA_TOKEN:
+        return null;
+
+      default:
+        throw new ParseException("parseExpressionPP", TokenType.ASSIGN_TOKEN, token.getType());
+    }
+  }
+
+  private Expression parseSimpleExpressionP(Expression lhs) throws ParseException {
+    Token token = scanner.viewNextToken();
+    // additive expression prime
+    if (isAddop(token.getType()) || isMulop(token.getType())) {      
+      // parse additive expression, check for relop as next token
+      Expression relopLhs = parseAdditiveExpressionP(lhs);
+      if (isRelop(scanner.viewNextToken().getType())) {
+          Token relopToken = scanner.getNextToken();
+          Expression relopRhs = parseAdditiveExpression();
+          return new BinaryExpression(relopLhs, relopRhs, relopToken.getType());
+      }
+      else {
+          // no relop, so just return the lhs
+          return relopLhs;
+      }
+    }
+
+    else if (isRelop(token.getType())) {
+      // relop additive expression
+      Token relopToken = scanner.getNextToken();
+      Expression rhs = parseAdditiveExpression();
+      return new BinaryExpression(lhs, rhs, relopToken.getType());
+    }
+
+    else {
+      switch (token.getType()) {
+        
+      // follow set
+      case SEMICOLON_TOKEN:
+      case CPAREN_TOKEN:
+      case CBRACKET_TOKEN:
+      case COMMA_TOKEN:
+        return null;
+
+      default:
+        throw new ParseException("parseSimpleExpressionP", TokenType.MULT_TOKEN, token.getType());
+      }
+    }
+  }
+  
+  public Expression parseAdditiveExpression() throws ParseException {
+    Expression lhs = parseTerm();
+    while (isAddop(scanner.viewNextToken().getType())) {
+      Token addopToken = scanner.getNextToken();
+      Expression rhs = parseTerm();
+      lhs = new BinaryExpression(lhs, rhs, addopToken.getType());
+    }
+    return lhs;
+  }
+
+  public Expression parseAdditiveExpressionP(Expression lhs) throws ParseException {
+    Expression termLhs = parseTermP(lhs);
+    while (isAddop(scanner.viewNextToken().getType())) {
+      Token addopToken = scanner.getNextToken();
+      Expression rhs = parseTerm();
+      termLhs = new BinaryExpression(termLhs, rhs, addopToken.getType());
+    }
+    return termLhs;
+  }
+
+  public Expression parseTerm() throws ParseException {
+    Expression lhs = parseFactor();
+    while (isMulop(scanner.viewNextToken().getType())) {
+      Token mulopToken = scanner.getNextToken();
+      Expression rhs = parseFactor();
+      lhs = new BinaryExpression(lhs, rhs, mulopToken.getType());      
+    }
+    return lhs;
+  }
+  
+  public Expression parseTermP(Expression lhs) throws ParseException {
+    while (isMulop(scanner.viewNextToken().getType())) {
+      Token mulopToken = scanner.getNextToken();
+      Expression rhs = parseFactor();
+      lhs = new BinaryExpression(lhs, rhs, mulopToken.getType());      
+    }
+    return lhs;
+  }
+  
+  public Expression parseFactor() throws ParseException {
+    switch(scanner.viewNextToken().getType()) {
+      case OPAREN_TOKEN:
+        handledMatch("ParseFactor", TokenType.OPAREN_TOKEN);
+        Expression expr = parseExpression();
+        handledMatch("ParseFactor", TokenType.CPAREN_TOKEN);
+        return expr;
+      case ID_TOKEN:
+        return parseExpressionP(scanner.getNextToken());
+      case NUM_TOKEN:
+        return new NumExpression((Integer) scanner.getNextToken().getData());
+      default:
+        throw new ParseException("ParseFactor", TokenType.OPAREN_TOKEN, scanner.viewNextToken().getType());
+    }
+  }
+
+  public Expression parseFactorP(Token id_token) throws ParseException {
+    switch(scanner.viewNextToken().getType()) {
+      case OBRACKET_TOKEN:
+        handledMatch("ParseFactorP", TokenType.OBRACKET_TOKEN);
+        Expression expr = parseExpression();
+        handledMatch("ParseFactorP", TokenType.CBRACKET_TOKEN);
+        return new VarExpression(id_token.getData().toString(), expr);
+      case OPAREN_TOKEN:
+        handledMatch("ParseFactorP", TokenType.OPAREN_TOKEN);
+        ArrayList<Expression> args = parseArgs();
+        handledMatch("ParseFactorP", TokenType.CPAREN_TOKEN);
+        return new CallExpression(id_token.getData().toString(), args);
+      default:
+        return new VarExpression(id_token.getData().toString());
     }
   }
 
@@ -175,8 +343,6 @@ public class CMinusParser {
   }
 
   private Statement parseIterStatement() throws ParseException {
-    Token token = scanner.getNextToken();
-
     handledMatch("ParseIterStatement", TokenType.WHILE_TOKEN);
     handledMatch("ParseIterStatement", TokenType.OPAREN_TOKEN);
 
@@ -190,13 +356,10 @@ public class CMinusParser {
   }
 
   private Statement parseReturnStatement() throws ParseException {
-    Token token = scanner.getNextToken();
-
     handledMatch("ParseReturnStatement", TokenType.RETURN_TOKEN);
-
-    token = scanner.getNextToken();
+    
     Expression expr = null;
-    switch(token.getType()) {
+    switch(scanner.viewNextToken().getType()) {
       case NUM_TOKEN:
       case OPAREN_TOKEN:
       case ID_TOKEN:
@@ -212,38 +375,35 @@ public class CMinusParser {
   }
 
   private Statement parseSelectStatement() throws ParseException {
-    Token token = scanner.getNextToken();
     
-   handledMatch("ParseSelectStatement", TokenType.IF_TOKEN);
-   handledMatch("ParseSelectStatement", TokenType.OPAREN_TOKEN);
+    handledMatch("ParseSelectStatement", TokenType.IF_TOKEN);
+    handledMatch("ParseSelectStatement", TokenType.OPAREN_TOKEN);
 
-   Expression expr = parseExpression();
+    Expression expr = parseExpression();
 
-   handledMatch("ParseSelectStatement", TokenType.CPAREN_TOKEN);
+    handledMatch("ParseSelectStatement", TokenType.CPAREN_TOKEN);
 
-   Statement stmt = parseStatement();
+    Statement stmt = parseStatement();
 
-   if (scanner.viewNextToken().getType() == TokenType.ELSE_TOKEN) {
-     Statement elseStmt = parseStatement();
-     return new SelectStatement(expr, stmt, elseStmt);
-   }
-   else {
-     return new SelectStatement(expr, stmt);
-   }
+    if (scanner.viewNextToken().getType() == TokenType.ELSE_TOKEN) {
+      handledMatch("ParseSelectStatement", TokenType.ELSE_TOKEN);
+      Statement elseStmt = parseStatement();
+      return new SelectStatement(expr, stmt, elseStmt);
+    }
+    else {
+      return new SelectStatement(expr, stmt);
+    }
   }
 
   private Statement parseCompStatement() throws ParseException {
-    Token token = scanner.getNextToken();
-
     handledMatch("ParseCompStatement", TokenType.OCURLY_TOKEN);
     
     ArrayList<Declaration> localDeclList = parseLocalDeclarations();
     
     ArrayList<Statement> stmtList = new ArrayList<Statement>();
-    
-    token = scanner.getNextToken();
-    while (token.getType() != TokenType.CCURLY_TOKEN) {
-      switch (token.getType()) {
+
+    while (scanner.viewNextToken().getType() != TokenType.CCURLY_TOKEN) {
+      switch (scanner.viewNextToken().getType()) {
         case NUM_TOKEN:
         case OPAREN_TOKEN:
         case ID_TOKEN:
@@ -256,9 +416,8 @@ public class CMinusParser {
           stmtList.add(newStmt);
           break;
         default:
-          break;
+          throw new ParseException("ParseCompStatement", TokenType.NUM_TOKEN, scanner.viewNextToken().getType());
       }
-      token = scanner.getNextToken();
     }
 
     handledMatch("ParseCompStatement", TokenType.CCURLY_TOKEN); 
@@ -268,32 +427,29 @@ public class CMinusParser {
 
   private ArrayList<Declaration> parseLocalDeclarations() throws ParseException {
     ArrayList<Declaration> decls = new ArrayList<Declaration>();
-    switch(scanner.viewNextToken().getType()) {
-      case OBRACKET_TOKEN:
-      case SEMICOLON_TOKEN:
-        decls.add(parseDeclaration());
-        break;
-      default:
-        break;
+    while (scanner.viewNextToken().getType() == TokenType.INT_TOKEN) {
+      Declaration vdecl = parseDeclaration();
+      decls.add(vdecl);
     }
-
+    
     return decls;
   }
 
-  private Statement parseExprStatement() throws ParseException{
-    Token token = scanner.viewNextToken();
-    switch (token.getType()){
+  private Statement parseExprStatement() throws ParseException {
+    Expression exp = null;
+
+    switch (scanner.viewNextToken().getType()) {
       case NUM_TOKEN:
       case OPAREN_TOKEN:
       case ID_TOKEN:
-      case SEMICOLON_TOKEN:
-        Expression exp = new Expression();
         exp = parseExpression();
-        return new ReturnStatement(exp);
       default:
-        throw new ParseException("parseExprStatement", TokenType.NUM_TOKEN, token.getType());
+        break;
     }
     
+    handledMatch("ParseExprStatement", TokenType.SEMICOLON_TOKEN);
+
+    return new ExprStatement(exp);
   }
 
   private Param parseParam() throws ParseException {
@@ -302,19 +458,38 @@ public class CMinusParser {
       Token id_token = scanner.getNextToken();
       Boolean hasBrackets = false;
       if (scanner.viewNextToken().getType() == TokenType.OBRACKET_TOKEN) {
-        scanner.getNextToken();
-        scanner.getNextToken();
+        handledMatch("ParseParam", TokenType.OBRACKET_TOKEN);
+        handledMatch("ParseParam", TokenType.CBRACKET_TOKEN);
         hasBrackets = true;
       }
       return new Param(id_token.getData().toString(), hasBrackets);
     }
     else {
-      throw new ParseException("ParseParam", TokenType.INT_TOKEN, token.getType);
+      throw new ParseException("ParseParam", TokenType.INT_TOKEN, token.getType());
     }
   }
 
+  private ArrayList<Expression> parseArgs() throws ParseException {
+    ArrayList<Expression> args = new ArrayList<Expression>();
+    while (scanner.viewNextToken().getType() != TokenType.CPAREN_TOKEN) {
+      switch (scanner.viewNextToken().getType()) {
+        case COMMA_TOKEN:
+          handledMatch("ParseArgs", TokenType.COMMA_TOKEN);
+        case NUM_TOKEN:
+        case OPAREN_TOKEN:
+        case ID_TOKEN:
+          Expression expr = parseExpression();
+          args.add(expr);
+          break;
+        default:
+          throw new ParseException("ParseArgs", TokenType.NUM_TOKEN, scanner.viewNextToken().getType());
+      }
+    }
+    return args;
+  }
+
   private void match(TokenType t) throws MatchException {
-    if (t != scanner.viewNextToken().getType()) {
+    if (t != scanner.getNextToken().getType()) {
       throw new MatchException(t, scanner.viewNextToken().getType());
     }
   }
@@ -325,6 +500,40 @@ public class CMinusParser {
     }
     catch (MatchException e) {
       throw new ParseException(routine, t, e.actualTokenType);
+    }
+  }
+
+  private boolean isAddop(TokenType t) {
+    switch (t) {
+      case PLUS_TOKEN:
+      case MINUS_TOKEN:
+        return true;
+      default:
+        return false;
+    }
+  }
+  
+  private boolean isMulop(TokenType t) {
+    switch (t) {
+      case MULT_TOKEN:
+      case DIV_TOKEN:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  private boolean isRelop(TokenType t) {
+    switch (t) {
+      case LESS_TOKEN:
+      case GREATER_TOKEN:
+      case GEQ_TOKEN:
+      case LEQ_TOKEN:
+      case EQL_TOKEN:
+      case NEQ_TOKEN:
+        return true;
+      default:
+        return false;
     }
   }
 }
