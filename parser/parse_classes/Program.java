@@ -6,6 +6,10 @@ public class Program implements ParseClass {
 
   ArrayList<Declaration> decls;
 
+  public Program(ArrayList<Declaration> decls) {
+    this.decls = decls;
+  }
+
   public void Print(int indent) {
     for (Declaration d : decls) {
       d.Print(indent);

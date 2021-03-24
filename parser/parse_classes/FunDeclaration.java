@@ -16,18 +16,19 @@ public class FunDeclaration extends Declaration {
     }
 
     public void Print(int indent) {
-        ParseUtility.IndentedPrintln("FunDeclaration", indent);
-        ParseUtility.IndentedPrintln(type.toString(), indent+1);
-        ParseUtility.IndentedPrintln(id.toString(), indent+1);
-        ParseUtility.IndentedPrintln("{", indent+1);
-        for (Param currParam : params) {
-            currParam.Print(indent+2);
+        ParseUtility.IndentedPrintln(type.toString() + " " + id.toString() + "(", indent);
+        if (params != null) {
+            for (Param currParam : params) {
+                currParam.Print(indent + 1);
+            }
+        } else {
+            ParseUtility.IndentedPrintln("void", indent + 1);
         }
-        ParseUtility.IndentedPrintln("}", indent+1);
+        ParseUtility.IndentedPrintln(")", indent);
 
-        cs.Print(indent+1);
-      }
-    
+        cs.Print(indent + 1);
+    }
+
     public ArrayList<Param> getParams() {
         return params;
     }

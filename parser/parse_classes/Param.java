@@ -9,11 +9,11 @@ public class Param implements ParseClass {
   public Param(String id, Boolean hasBrackets) {
     this.id = id;
     this.hasBrackets = hasBrackets;
-  }  
+  }
 
   public void Print(int indent) {
     StringBuilder sb = new StringBuilder();
-    sb.append(id);
+    sb.append("int " + id);
     if (hasBrackets) {
       sb.append("[]");
     }

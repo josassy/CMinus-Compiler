@@ -8,13 +8,14 @@ package parser;
 import java.io.*;
 
 import scanner.CMinusScanner;
+import parser.parse_classes.Program;
 
 public class Main {
   public static void main(String[] args) {
     FileReader in = null;
     FileWriter out = null;
 
-    String fileStub = "quicksort";
+    String fileStub = "quicksort_modified";
 
     try {
       File outFile = new File(fileStub + ".out");
@@ -35,7 +36,8 @@ public class Main {
     try {
       CMinusScanner scanner = new CMinusScanner(inFile);
       CMinusParser parser = new CMinusParser(scanner);
-      parser.parseProgram();
+      Program p = parser.parseProgram();
+      p.Print(0);
 
     } catch (ParseException e) {
       System.out.println("ParseException: " + e.toString());
