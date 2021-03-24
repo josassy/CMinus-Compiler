@@ -2,6 +2,14 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 
+/**
+ * File: VarDeclaration.java
+ * 
+ * Represent a Selection Statement in C-, kncluding an Expression to represent
+ * the "if" condition, a Statement to reprsent the code executed if that
+ * condition is met, and an "else" Statement to represent the code executed
+ * otherwise
+ */
 public class SelectStatement extends Statement {
     Expression expr;
     Statement stmt;
@@ -21,24 +29,12 @@ public class SelectStatement extends Statement {
 
     public void Print(int indent) {
         ParseUtility.IndentedPrintln("if (", indent);
-        expr.Print(indent+1);
+        expr.Print(indent + 1);
         ParseUtility.IndentedPrintln(")", indent);
-        stmt.Print(indent+1);
-        if (elseStmt != null){
+        stmt.Print(indent + 1);
+        if (elseStmt != null) {
             ParseUtility.IndentedPrintln("else", indent);
-            elseStmt.Print(indent+1);
+            elseStmt.Print(indent + 1);
         }
-    }
-
-    public Expression getExpr() {
-        return expr;
-    }
-
-    public Statement getStmt() {
-        return stmt;
-    }
-
-    public Statement getElseStmt() {
-        return elseStmt;
     }
 }

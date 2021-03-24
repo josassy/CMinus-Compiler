@@ -3,6 +3,11 @@ package parser.parse_classes;
 import parser.ParseUtility;
 import scanner.Token;
 
+/**
+ * File: Declaration.java
+ * 
+ * Represent a generic declaration in C-. Contains a type token and ID token.
+ */
 public class Declaration implements ParseClass {
 
   protected Token type;
@@ -15,13 +20,5 @@ public class Declaration implements ParseClass {
 
   public void Print(int indent) {
     ParseUtility.IndentedPrintln(type.getData().toString() + " " + id, indent);
-  }
-
-  public String getType() {
-    return type.toString();
-  }
-
-  public String getId() {
-    return id;
   }
 }

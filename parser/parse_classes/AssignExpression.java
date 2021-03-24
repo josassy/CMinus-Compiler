@@ -2,6 +2,12 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 
+/**
+ * File: AssignExpression.java
+ * 
+ * Represent an assignement expression with a VarExpression on the left and an
+ * expression on the right.
+ */
 public class AssignExpression extends Expression {
   VarExpression ve;
   Expression rhs;
@@ -13,15 +19,7 @@ public class AssignExpression extends Expression {
 
   public void Print(int indent) {
     ParseUtility.IndentedPrintln("=", indent);
-    ve.Print(indent+1);
-    rhs.Print(indent+1);
-  }
-
-  public VarExpression getVE() {
-    return ve;
-  }
-
-  public Expression getRHS() {
-    return rhs;
+    ve.Print(indent + 1);
+    rhs.Print(indent + 1);
   }
 }

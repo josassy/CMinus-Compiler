@@ -2,6 +2,13 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 
+/**
+ * File: Param.java
+ * 
+ * Represent parameters that are part of a function declaration. Each parameter
+ * contains an id string and a boolean flag indicating whether the parameter is
+ * an array data type.
+ */
 public class Param implements ParseClass {
   String id;
   Boolean hasBrackets;
@@ -18,13 +25,5 @@ public class Param implements ParseClass {
       sb.append("[]");
     }
     ParseUtility.IndentedPrintln(sb.toString(), indent);
-  }
-
-  public String getID() {
-    return id;
-  }
-
-  public Boolean getHasBrackets() {
-    return hasBrackets;
   }
 }

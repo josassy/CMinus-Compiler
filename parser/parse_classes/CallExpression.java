@@ -3,6 +3,13 @@ package parser.parse_classes;
 import parser.ParseUtility;
 import java.util.ArrayList;
 
+/**
+ * File: CallExpression.java
+ * 
+ * Represent a function call in C-, which inherits from Expression for
+ * interaction with other expressions. Contains id string and args list of
+ * expressions.
+ */
 public class CallExpression extends Expression {
   String id;
   ArrayList<Expression> args;
@@ -18,20 +25,12 @@ public class CallExpression extends Expression {
   }
 
   public void Print(int indent) {
-    ParseUtility.IndentedPrintln(id+"(", indent);
+    ParseUtility.IndentedPrintln(id + "(", indent);
     if (args != null) {
       for (Expression e : args) {
-        e.Print(indent+1);
+        e.Print(indent + 1);
       }
     }
     ParseUtility.IndentedPrintln(")", indent);
-  }
-
-  public String getID() {
-    return id;
-  }
-
-  public ArrayList<Expression> getArgs() {
-    return args;
   }
 }

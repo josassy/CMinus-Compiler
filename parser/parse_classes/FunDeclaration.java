@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import parser.ParseUtility;
 import scanner.Token;
 
+/**
+ * File: FunDeclaration.java
+ * 
+ * Represent a function declaration. Contains a list of parameters and a
+ * compound statement for the body of the function.
+ */
 public class FunDeclaration extends Declaration {
     ArrayList<Param> params;
     Statement cs;
@@ -27,13 +33,5 @@ public class FunDeclaration extends Declaration {
         ParseUtility.IndentedPrintln(")", indent);
 
         cs.Print(indent + 1);
-    }
-
-    public ArrayList<Param> getParams() {
-        return params;
-    }
-
-    public Statement getCompStatement() {
-        return cs;
     }
 }

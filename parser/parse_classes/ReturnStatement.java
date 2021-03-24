@@ -2,6 +2,11 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 
+/**
+ * File: ReturnStatement.java
+ * 
+ * Represent a return statement in C-. Contains an expression to be returned.
+ */
 public class ReturnStatement extends Statement {
     Expression expr;
 
@@ -11,10 +16,6 @@ public class ReturnStatement extends Statement {
 
     public void Print(int indent) {
         ParseUtility.IndentedPrintln("return", indent);
-        expr.Print(indent+1);
-      }
-
-    public Expression getExpr() {
-        return expr;
+        expr.Print(indent + 1);
     }
 }

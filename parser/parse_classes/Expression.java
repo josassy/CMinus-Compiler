@@ -1,6 +1,10 @@
 package parser.parse_classes;
 
+/**
+ * File: Expression.java
+ * 
+ * Represent an expression in C-. The class is used only for identity purposes,
+ * and contains no data members.
+ */
 public abstract class Expression implements ParseClass {
-// this class is just used for identity purposes, so it can remain empty
-
 }
