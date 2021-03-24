@@ -1,13 +1,15 @@
-int gcd(
-  int u
-  int v
-)
+int gcd
+  (
+    int u
+    int v
+  )
   {
-    if (
-      ==
-        v
-        0
-    )
+    if
+      (
+        ==
+          v
+          0
+      )
       return
         u
     else
@@ -23,9 +25,10 @@ int gcd(
               v
         )
   }
-void main(
-  void
-)
+void main
+  (
+    void
+  )
   {
     int x
     int y
