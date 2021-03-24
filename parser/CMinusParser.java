@@ -8,12 +8,24 @@ import scanner.Token.TokenType;
 
 public class CMinusParser {
 
+  // We use our scanner created in a previous project to scan the file for tokens
   CMinusScanner scanner;
 
+  /**
+   * Initialize the scanner in the constructor
+   * 
+   * @param scanner the scanner from CMinusParser
+   */
   public CMinusParser(CMinusScanner scanner) {
     this.scanner = scanner;
   }
 
+  /**
+   * Parses the program from the beginning until EOF
+   * 
+   * @return the complete program with printable AST tree
+   * @throws ParseException
+   */
   public Program parseProgram() throws ParseException {
     ArrayList<Declaration> decls = new ArrayList<Declaration>();
 
@@ -32,6 +44,12 @@ public class CMinusParser {
     return new Program(decls);
   }
 
+  /**
+   * Parse a declaration containing either a fundecl or vardecl
+   * 
+   * @return Declaration object initialized with values.
+   * @throws ParseException if unexpected tokens are found
+   */
   private Declaration parseDeclaration() throws ParseException {
     Token type_token = scanner.getNextToken();
 
@@ -46,6 +64,14 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse a declaration' containing the second parts of a declaration
+   * 
+   * @param type_token the void or int type of the decl from parseDeclaration
+   * @param id_token   the id passed from parseDeclaration
+   * @return an initialized VarDeclaration
+   * @throws ParseException
+   */
   private Declaration parseDeclarationP(Token type_token, Token id_token) throws ParseException {
     Token token = scanner.viewNextToken();
 
@@ -63,6 +89,14 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse a VarDeclaration' containing the second part of a VarDeclaration
+   * 
+   * @param type_token the void or int type oof the decl from parseDeclarationP
+   * @param id_token   the id passed from parseDeclarationP
+   * @return an initialized VarDeclaration
+   * @throws ParseException
+   */
   private Declaration parseVarDeclarationP(Token type_token, Token id_token) throws ParseException {
     Token token = scanner.viewNextToken();
     // parse the int accessor
@@ -81,6 +115,15 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse a FunDeclaration' containing the second part of a FunDeclaration
+   * 
+   * @param type_token the void or int type of the decl from parseDeclaration or
+   *                   parseDeclarationP
+   * @param id_token   the id passed from parseDeclaration or parseDeclarationP
+   * @return an initialized FunDeclaration
+   * @throws ParseException
+   */
   private Declaration parseFunDeclarationP(Token type_token, Token id_token) throws ParseException {
     handledMatch("parseFunDeclarationP", TokenType.OPAREN_TOKEN);
 
@@ -112,6 +155,13 @@ public class CMinusParser {
     return new FunDeclaration(type_token, id_token.getData().toString(), params, cs);
   }
 
+  /**
+   * Parse a generic expression, recursing down into parsing a specific kind of
+   * expression
+   * 
+   * @return Expression object with initialized values
+   * @throws ParseException
+   */
   private Expression parseExpression() throws ParseException {
     Token token = scanner.getNextToken();
     switch (token.getType()) {
@@ -132,6 +182,13 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse the right-hand side of a generic expression
+   * 
+   * @param id_token
+   * @return Expression object with initialized values
+   * @throws ParseException
+   */
   private Expression parseExpressionP(Token id_token) throws ParseException {
     Token token = scanner.viewNextToken();
     switch (token.getType()) {
@@ -179,6 +236,15 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse the third part of VarExpressions containing index accessors, accepting
+   * values from previous parseExpression calls.
+   * 
+   * @param id_token the ID of the variable being referenced
+   * @param accessor the Expression indexing the variable
+   * @return Expression object with initialized values
+   * @throws ParseException
+   */
   private Expression parseExpressionPP(Token id_token, Expression accessor) throws ParseException {
 
     Token token = scanner.viewNextToken();
@@ -214,6 +280,15 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse the second part of a Simple Expression after being called from
+   * parseExpressionP or parseExpressionPP
+   * 
+   * @param lhs an Expression representing the first part of the Simple Expression
+   *            parsed by parseExpressionP or parseExpressionPP
+   * @return an initialized SimpleExpression
+   * @throws ParseException
+   */
   private Expression parseSimpleExpressionP(Expression lhs) throws ParseException {
     Token token = scanner.viewNextToken();
     // additive expression prime
@@ -253,6 +328,12 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse an Additive Expression
+   * 
+   * @return an initialized BinaryExpression
+   * @throws ParseException
+   */
   public Expression parseAdditiveExpression() throws ParseException {
     Expression lhs = parseTerm();
     while (isAddop(scanner.viewNextToken().getType())) {
@@ -263,6 +344,15 @@ public class CMinusParser {
     return lhs;
   }
 
+  /**
+   * Parse the second part of an Additive Expression after being caleld from
+   * AdditiveExpression
+   * 
+   * @param lhs the first part of Additive Expression as parsed by
+   *            parseAdditiveExpression
+   * @return an initialized BinaryExpression
+   * @throws ParseException
+   */
   public Expression parseAdditiveExpressionP(Expression lhs) throws ParseException {
     Expression termLhs = parseTermP(lhs);
     while (isAddop(scanner.viewNextToken().getType())) {
@@ -273,6 +363,13 @@ public class CMinusParser {
     return termLhs;
   }
 
+  /**
+   * Parse a series of factors separated by mulops
+   * 
+   * @return an Expression object with a left-recursive tree of factors separated
+   *         by mulops
+   * @throws ParseException
+   */
   public Expression parseTerm() throws ParseException {
     Expression lhs = parseFactor();
     while (isMulop(scanner.viewNextToken().getType())) {
@@ -283,6 +380,13 @@ public class CMinusParser {
     return lhs;
   }
 
+  /**
+   * Parse a series of factors preceded by and separated by mulops
+   * 
+   * @param lhs a term parsed by parseTerm
+   * @return an initialized BinaryExpression
+   * @throws ParseException
+   */
   public Expression parseTermP(Expression lhs) throws ParseException {
     while (isMulop(scanner.viewNextToken().getType())) {
       Token mulopToken = scanner.getNextToken();
@@ -292,6 +396,12 @@ public class CMinusParser {
     return lhs;
   }
 
+  /**
+   * Parse a factor into an expression of one of several types
+   * 
+   * @return a NumExpression, VarExpression, or CallExpression
+   * @throws ParseException
+   */
   public Expression parseFactor() throws ParseException {
     switch (scanner.viewNextToken().getType()) {
     case OPAREN_TOKEN:
@@ -308,6 +418,13 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse the second part of a factor
+   * 
+   * @param id_token a token containing an ID name for a variable
+   * @return an initialized VarExpression or CallExpression
+   * @throws ParseException
+   */
   public Expression parseFactorP(Token id_token) throws ParseException {
     switch (scanner.viewNextToken().getType()) {
     case OBRACKET_TOKEN:
@@ -325,6 +442,14 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse a generic statement, ultimately returning a statement of a specific
+   * type
+   * 
+   * @return an initialized ExprStatement, CompStatement, SelectStatement, or
+   *         ReturnStatement
+   * @throws ParseException
+   */
   private Statement parseStatement() throws ParseException {
     Token token = scanner.viewNextToken();
 
@@ -347,6 +472,12 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse an iteration statement
+   * 
+   * @return an initialized IterStatement
+   * @throws ParseException
+   */
   private Statement parseIterStatement() throws ParseException {
     handledMatch("ParseIterStatement", TokenType.WHILE_TOKEN);
     handledMatch("ParseIterStatement", TokenType.OPAREN_TOKEN);
@@ -360,6 +491,12 @@ public class CMinusParser {
     return new IterStatement(expr, stmt);
   }
 
+  /**
+   * Parse a Return Statement
+   * 
+   * @return an initialized ReturnStatement
+   * @throws ParseException
+   */
   private Statement parseReturnStatement() throws ParseException {
     handledMatch("ParseReturnStatement", TokenType.RETURN_TOKEN);
 
@@ -379,6 +516,12 @@ public class CMinusParser {
     return new ReturnStatement(expr);
   }
 
+  /**
+   * Parse a SelectStatement
+   * 
+   * @return an initialized SelectStatement
+   * @throws ParseException
+   */
   private Statement parseSelectStatement() throws ParseException {
 
     handledMatch("ParseSelectStatement", TokenType.IF_TOKEN);
@@ -399,6 +542,12 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse a CompStatement
+   * 
+   * @return an initialized CompStatement
+   * @throws ParseException
+   */
   private Statement parseCompStatement() throws ParseException {
     handledMatch("ParseCompStatement", TokenType.OCURLY_TOKEN);
 
@@ -429,6 +578,12 @@ public class CMinusParser {
     return new CompStatement(localDeclList, stmtList);
   }
 
+  /**
+   * Parse a list of VarDeclarations starting with int
+   * 
+   * @return a list of VarDeclarations starting with int
+   * @throws ParseException
+   */
   private ArrayList<Declaration> parseLocalDeclarations() throws ParseException {
     ArrayList<Declaration> decls = new ArrayList<Declaration>();
     while (scanner.viewNextToken().getType() == TokenType.INT_TOKEN) {
@@ -439,6 +594,12 @@ public class CMinusParser {
     return decls;
   }
 
+  /**
+   * Parse an ExprStatement
+   * 
+   * @return an initialized ExprStatement
+   * @throws ParseException
+   */
   private Statement parseExprStatement() throws ParseException {
     Expression exp = null;
 
@@ -456,6 +617,12 @@ public class CMinusParser {
     return new ExprStatement(exp);
   }
 
+  /**
+   * Parse a Param
+   * 
+   * @return an intialized Param
+   * @throws ParseException
+   */
   private Param parseParam() throws ParseException {
     Token token = scanner.getNextToken();
     if (token.getType() == TokenType.INT_TOKEN) {
@@ -472,6 +639,12 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Parse a list of Args
+   * 
+   * @return an initialized ArrayList of Expressions
+   * @throws ParseException
+   */
   private ArrayList<Expression> parseArgs() throws ParseException {
     ArrayList<Expression> args = new ArrayList<Expression>();
     while (scanner.viewNextToken().getType() != TokenType.CPAREN_TOKEN) {
@@ -491,6 +664,12 @@ public class CMinusParser {
     return args;
   }
 
+  /**
+   * Verifies that the next token is the type that we expect it to be
+   * 
+   * @param t Token whose type we want to check
+   * @throws MatchException
+   */
   private void match(TokenType t) throws MatchException {
     Token munch = scanner.getNextToken();
     if (t != munch.getType()) {
@@ -498,6 +677,14 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Wrapper for match that catches the MatchException and throws a ParseException
+   * to provide for better debugging
+   * 
+   * @param routine A String listing the calling routine for debugging purposes
+   * @param t       The token whose type we want to check
+   * @throws ParseException
+   */
   private void handledMatch(String routine, TokenType t) throws ParseException {
     try {
       match(t);
@@ -506,6 +693,13 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Matches a token against the multiple kinds of addop, allowing for easier
+   * verification of the next token
+   * 
+   * @param t The TokenType to check against the lsit of addops
+   * @return a boolean indicating whether the match succeeded
+   */
   private boolean isAddop(TokenType t) {
     switch (t) {
     case PLUS_TOKEN:
@@ -516,6 +710,13 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Matches a token against the multiple kinds of mulop, allowing for easier
+   * verification of the next token
+   * 
+   * @param t The TokenType to check against the lsit of mulops
+   * @return a boolean indicating whether the match succeeded
+   */
   private boolean isMulop(TokenType t) {
     switch (t) {
     case MULT_TOKEN:
@@ -526,6 +727,13 @@ public class CMinusParser {
     }
   }
 
+  /**
+   * Matches a token against the multiple kinds of relop, allowing for easier
+   * verification of the next token
+   * 
+   * @param t The TokenType to check against the lsit of relops
+   * @return a boolean indicating whether the match succeeded
+   */
   private boolean isRelop(TokenType t) {
     switch (t) {
     case LESS_TOKEN:
