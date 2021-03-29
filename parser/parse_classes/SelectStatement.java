@@ -4,7 +4,7 @@ import parser.ParseUtility;
 import java.io.Writer;
 
 /**
- * File: VarDeclaration.java
+ * File: SelectStatement.java
  * 
  * Represent a Selection Statement in C-, kncluding an Expression to represent
  * the "if" condition, a Statement to reprsent the code executed if that

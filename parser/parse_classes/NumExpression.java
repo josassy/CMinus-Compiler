@@ -4,7 +4,7 @@ import parser.ParseUtility;
 import java.io.Writer;
 
 /**
- * File: VarDeclaration.java
+ * File: NumExpression.java
  * 
  * Represent an int variable in C- with a single integer value
  */
