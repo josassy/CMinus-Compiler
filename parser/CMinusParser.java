@@ -29,6 +29,9 @@ public class CMinusParser {
   public Program parseProgram() throws ParseException {
     ArrayList<Declaration> decls = new ArrayList<Declaration>();
 
+    Declaration firstDecl = parseDeclaration();
+    decls.add(firstDecl);
+
     while (scanner.viewNextToken().getType() != TokenType.EOF) {
       switch (scanner.viewNextToken().getType()) {
       case VOID_TOKEN:
