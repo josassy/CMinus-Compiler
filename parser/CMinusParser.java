@@ -6,17 +6,17 @@ import parser.parse_classes.*;
 import scanner.*;
 import scanner.Token.TokenType;
 
-public class CMinusParser {
+public class CMinusParser implements Parser {
 
   // We use our scanner created in a previous project to scan the file for tokens
-  CMinusScanner scanner;
+  Scanner scanner;
 
   /**
    * Initialize the scanner in the constructor
    * 
    * @param scanner the scanner from CMinusParser
    */
-  public CMinusParser(CMinusScanner scanner) {
+  public CMinusParser(Scanner scanner) {
     this.scanner = scanner;
   }
 

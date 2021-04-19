@@ -7,7 +7,7 @@ package scanner;
  * (no munch) methods.
  */
 public interface Scanner {
-  public Token getNextToken() throws java.io.IOException;
+  public Token getNextToken();
 
   public Token viewNextToken();
 }
