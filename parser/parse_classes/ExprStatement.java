@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import lowlevel.*;
 import java.io.Writer;
 
 /**
@@ -21,5 +22,10 @@ public class ExprStatement extends Statement {
         if (expr != null) {
             expr.Print(out, indent + 1);
         }
+    }
+
+    public void genLLCode(Function fun) {
+        Operation thisOper = expr.genLLCode();
+        fun.getCurrBlock().appendOper(thisOper);
     }
 }

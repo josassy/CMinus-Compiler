@@ -153,7 +153,7 @@ public class CMinusParser implements Parser {
 
     handledMatch("parseFunDeclarationP", TokenType.CPAREN_TOKEN);
 
-    Statement cs = parseCompStatement();
+    CompStatement cs = parseCompStatement();
 
     return new FunDeclaration(type_token, id_token.getData().toString(), params, cs);
   }
@@ -551,7 +551,7 @@ public class CMinusParser implements Parser {
    * @return an initialized CompStatement
    * @throws ParseException
    */
-  private Statement parseCompStatement() throws ParseException {
+  private CompStatement parseCompStatement() throws ParseException {
     handledMatch("ParseCompStatement", TokenType.OCURLY_TOKEN);
 
     ArrayList<Declaration> localDeclList = parseLocalDeclarations();

@@ -1,6 +1,8 @@
 package parser.parse_classes;
 
 import java.io.Writer;
+import lowlevel.*;
+import parser.CodeGenerationException;
 
 /**
  * File: ParseClass.java

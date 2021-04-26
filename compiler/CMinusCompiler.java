@@ -37,12 +37,16 @@ public class CMinusCompiler implements Compiler {
             Parser myParser = new CMinusParser(myScanner);
 
             Program parseTree = myParser.parseProgram();
-            myParser.printAST(parseTree);
+            
+            // myParser.printAST(parseTree);
+            fileName = filePrefix + ".ast";
+            PrintWriter outFile = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+            parseTree.Print(outFile, 0);
 
             CodeItem lowLevelCode = parseTree.genLLCode();
 
             fileName = filePrefix + ".ll";
-            PrintWriter outFile =
+            outFile =
                     new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
             lowLevelCode.printLLCode(outFile);
             outFile.close();
@@ -124,6 +128,9 @@ public class CMinusCompiler implements Compiler {
             }
 
         } catch (IOException ioe) {
+
+        } catch (ParseException e) {
+            System.out.println("ParseException: " + e);
         }
 
     }

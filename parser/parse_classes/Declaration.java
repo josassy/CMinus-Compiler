@@ -1,7 +1,9 @@
 package parser.parse_classes;
 
+import parser.CodeGenerationException;
 import parser.ParseUtility;
 import scanner.Token;
+import lowlevel.CodeItem;
 import java.io.Writer;
 
 /**
@@ -21,5 +23,9 @@ public class Declaration implements ParseClass {
 
   public void Print(Writer out, int indent) {
     ParseUtility.IndentedPrintln(type.getData().toString() + " " + id, indent, out);
+  }
+
+  public CodeItem genLLCode() throws CodeGenerationException {
+    return null;
   }
 }

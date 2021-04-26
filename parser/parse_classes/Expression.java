@@ -1,5 +1,10 @@
 package parser.parse_classes;
 
+import lowlevel.Operation;
+import lowlevel.Function;
+
+import parser.CodeGenerationException;
+
 /**
  * File: Expression.java
  * 
@@ -7,4 +12,14 @@ package parser.parse_classes;
  * and contains no data members.
  */
 public abstract class Expression implements ParseClass {
+    private int regNum;
+
+    public int getRegNum() {
+        return regNum;
+    }
+    public void setRegNum(int destReg) {
+        regNum = destReg;
+    }
+
+    public abstract Operation genLLCode(Function fun) throws CodeGenerationException ;
 }

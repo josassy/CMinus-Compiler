@@ -1,7 +1,15 @@
 package parser.parse_classes;
 
+import lowlevel.Operation;
+import lowlevel.Operation.OperationType;
+import lowlevel.BasicBlock;
+import lowlevel.Function;
+import lowlevel.Operand;
+import compiler.CMinusCompiler;
+import parser.CodeGenerationException;
 import parser.ParseUtility;
 import java.io.Writer;
+import java.util.HashMap;
 
 /**
  * File: VarExpression.java
@@ -31,6 +39,32 @@ public class VarExpression extends Expression {
       ParseUtility.IndentedPrintln("[", indent + 1, out);
       index.Print(out, indent + 2);
       ParseUtility.IndentedPrintln("]", indent + 1, out);
+    }
+  }
+
+  public Operation genLLCode(Function fun) throws CodeGenerationException {
+    BasicBlock currBlock = fun.getCurrBlock();
+
+    // try to retrieve from function symtable
+    HashMap st = fun.getTable();
+    if (st.containsKey(id)) {
+      int key = (int)st.get(id);
+    }
+    
+    // if can't find, maybe its a global???
+    else if (CMinusCompiler.globalHash.containsKey(id)) {
+      // create a load operation
+      Operation loadOper = new Operation(OperationType.LOAD_I, currBlock);
+      Operand newSrc = new Operand(Operand.OperandType.REGISTER, (int)CMinusCompiler.globalHash.get(id));
+      Operand newDest = new Operand(Operand.OperandType.REGISTER, fun.getNewRegNum());
+      loadOper.setSrcOperand(0, newSrc);
+      loadOper.setDestOperand(0, newDest);
+      currBlock.appendOper(loadOper);
+    }
+
+    // if can't find in global, this variable probably doesn't exist!
+    else {
+      throw new CodeGenerationException("VarExpression: Could not find symbol " + id);
     }
   }
 }

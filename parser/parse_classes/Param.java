@@ -1,6 +1,8 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import lowlevel.CodeItem;
+import lowlevel.FuncParam;
 import java.io.Writer;
 
 /**
@@ -26,5 +28,9 @@ public class Param implements ParseClass {
       sb.append("[]");
     }
     ParseUtility.IndentedPrintln(sb.toString(), indent, out);
+  }
+
+  public FuncParam genLLCode() {
+    return null;
   }
 }
