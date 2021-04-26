@@ -21,5 +21,5 @@ public abstract class Expression implements ParseClass {
         regNum = destReg;
     }
 
-    public abstract Operation genLLCode(Function fun) throws CodeGenerationException ;
+    public abstract void genLLCode(Function fun) throws CodeGenerationException ;
 }
