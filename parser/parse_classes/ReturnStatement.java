@@ -19,7 +19,9 @@ public class ReturnStatement extends Statement {
 
     public void Print(Writer out, int indent) {
         ParseUtility.IndentedPrintln("return", indent, out);
-        expr.Print(out, indent + 1);
+        if (expr != null) {
+            expr.Print(out, indent + 1);
+        }
     }
 
     public void genLLCode(Function fun) throws CodeGenerationException {

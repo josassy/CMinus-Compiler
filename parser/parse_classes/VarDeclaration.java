@@ -2,7 +2,6 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 import scanner.Token;
-import lowlevel.CodeItem;
 import lowlevel.Data;
 import parser.CodeGenerationException;
 import java.io.Writer;
@@ -39,6 +38,8 @@ public class VarDeclaration extends Declaration {
 
     public Data genLLCode() throws CodeGenerationException {
         // since we are not handling arrays, ignore the size param
+        
+
         if (size > 0) {
             throw new CodeGenerationException("Cannot handle arrays in this simple parser");
         }

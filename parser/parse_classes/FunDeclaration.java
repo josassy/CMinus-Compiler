@@ -80,6 +80,11 @@ public class FunDeclaration extends Declaration {
 
         cs.genLLCode(thisFunction);
 
+        thisFunction.appendBlock(thisFunction.getReturnBlock());
+        if (thisFunction.getFirstUnconnectedBlock() != null) {
+            thisFunction.appendBlock(thisFunction.getFirstUnconnectedBlock());
+        }
+
         return thisFunction;
     }
 }

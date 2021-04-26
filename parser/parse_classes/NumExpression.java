@@ -23,7 +23,7 @@ public class NumExpression extends Expression {
         ParseUtility.IndentedPrintln(Integer.toString(num), indent, out);
     }
 
-    public Operation genLLCode(Function fun) {
+    public void genLLCode(Function fun) {
         HashMap st = fun.getTable();
         int newRegNum = fun.getNewRegNum();
         st.put(num, newRegNum);

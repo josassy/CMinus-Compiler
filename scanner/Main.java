@@ -33,7 +33,7 @@ public class Main {
     BufferedReader inFile = new BufferedReader(in);
     try {
       // CMinusScanner scanner = new CMinusScanner(inFile);
-      CMinusJFlexScanner scanner = new CMinusJFlexScanner(inFile);
+      CMinusScanner scanner = new CMinusScanner(inFile);
       while (scanner.hasNextToken()) {
         Token currToken = scanner.getNextToken();
         System.out.println(currToken.getType() + " " + currToken.getData());
@@ -45,8 +45,6 @@ public class Main {
           System.out.println("Couldn't write to output file");
         }
       }
-    } catch (IOException e) {
-      System.out.println("Couldn't read from input file");
     }
 
     try {

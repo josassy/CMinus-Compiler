@@ -36,7 +36,7 @@ public class BinaryExpression extends Expression {
         lhs.genLLCode(fun);
         int lopDest = lhs.getRegNum();
         rhs.genLLCode(fun);
-        int ropDest = lhs.getRegNum();
+        int ropDest = rhs.getRegNum();
 
         OperationType thingToDo;
 
@@ -76,8 +76,10 @@ public class BinaryExpression extends Expression {
         }
 
         Operation operationToAdd = new Operation(thingToDo, fun.getCurrBlock());
-        operationToAdd.setSrcOperand(0, lopDest);
-        operationToAdd.setSrcOperand(1, ropDest);
+        Operand lhsOperand = new Operand(Operand.OperandType.REGISTER, lopDest);
+        Operand rhsOperand = new Operand(Operand.OperandType.REGISTER, ropDest);
+        operationToAdd.setSrcOperand(0, lhsOperand);
+        operationToAdd.setSrcOperand(1, rhsOperand);
 
         int newRegNum = fun.getNewRegNum();
         setRegNum(newRegNum);

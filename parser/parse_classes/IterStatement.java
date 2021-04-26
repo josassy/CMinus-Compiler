@@ -50,7 +50,7 @@ public class IterStatement extends Statement {
         branchDecisionOperation.setSrcOperand(0, ifDest);
         branchDecisionOperation.setSrcOperand(1, zeroCompare);
         Operand branchOperand = new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum());
-        branchDecisionOperation.setDestOperand(0, branchOperand);
+        branchDecisionOperation.setSrcOperand(2, branchOperand);
         fun.getCurrBlock().appendOper(branchDecisionOperation);
 
         // append thenblock to fall through

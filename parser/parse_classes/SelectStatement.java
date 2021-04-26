@@ -69,7 +69,7 @@ public class SelectStatement extends Statement {
         } else {
             branchOperand = new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum());
         }
-        branchDecisionOperation.setDestOperand(0, branchOperand);
+        branchDecisionOperation.setSrcOperand(2, branchOperand);
         fun.getCurrBlock().appendOper(branchDecisionOperation);
 
         // append thenblock to fall through

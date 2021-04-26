@@ -48,7 +48,7 @@ public class VarExpression extends Expression {
     // try to retrieve from function symtable
     HashMap st = fun.getTable();
     if (st.containsKey(id)) {
-      this.setRegNum(st.get(id));
+      this.setRegNum((int) st.get(id));
     }
 
     // if can't find, maybe its a global???
