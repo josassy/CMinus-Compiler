@@ -32,6 +32,9 @@ public class NumExpression extends Expression {
         Operation newOperation = new Operation(Operation.OperationType.ASSIGN, fun.getCurrBlock());
         newOperation.setDestOperand(0, newDest);
         newOperation.setSrcOperand(0, newSrc);
-        return newOperation;
+        fun.getCurrBlock().appendOper(newOperation);
+
+        // Annotate destination register
+        this.setRegNum(newRegNum);
     }
 }

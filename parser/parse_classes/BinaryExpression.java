@@ -32,45 +32,47 @@ public class BinaryExpression extends Expression {
         rhs.Print(out, indent + 1);
     }
 
-    public Operation genLLCode(Function fun) throws CodeGenerationException {
-        Operand lopDest = lhs.genLLCode(fun).getDestOperand(0);
-        Operand ropDest = rhs.genLLCode(fun).getDestOperand(0);
+    public void genLLCode(Function fun) throws CodeGenerationException {
+        lhs.genLLCode(fun);
+        int lopDest = lhs.getRegNum();
+        rhs.genLLCode(fun);
+        int ropDest = lhs.getRegNum();
 
         OperationType thingToDo;
 
         switch (operator.getType()) {
-            case PLUS_TOKEN:
-                thingToDo = OperationType.ADD_I;
-                break;
-            case MINUS_TOKEN:
-                thingToDo = OperationType.SUB_I;
-                break;
-            case MULT_TOKEN:
-                thingToDo = OperationType.MUL_I;
-                break;
-            case DIV_TOKEN:
-                thingToDo = OperationType.DIV_I;
-                break;
-            case GEQ_TOKEN:
-                thingToDo = OperationType.GTE;
-                break;
-            case GREATER_TOKEN:
-                thingToDo = OperationType.GT;
-                break;
-            case LEQ_TOKEN:
-                thingToDo = OperationType.LTE;
-                break;
-            case LESS_TOKEN:
-                thingToDo = OperationType.LT;
-                break;
-            case EQL_TOKEN:
-                thingToDo = OperationType.EQUAL;
-                break;
-            case NEQ_TOKEN:
-                thingToDo = OperationType.NOT_EQUAL;
-                break;
-            default:
-                throw new CodeGenerationException("BINARY EXPRESSION: Invalid op type" + operator.getType().toString());
+        case PLUS_TOKEN:
+            thingToDo = OperationType.ADD_I;
+            break;
+        case MINUS_TOKEN:
+            thingToDo = OperationType.SUB_I;
+            break;
+        case MULT_TOKEN:
+            thingToDo = OperationType.MUL_I;
+            break;
+        case DIV_TOKEN:
+            thingToDo = OperationType.DIV_I;
+            break;
+        case GEQ_TOKEN:
+            thingToDo = OperationType.GTE;
+            break;
+        case GREATER_TOKEN:
+            thingToDo = OperationType.GT;
+            break;
+        case LEQ_TOKEN:
+            thingToDo = OperationType.LTE;
+            break;
+        case LESS_TOKEN:
+            thingToDo = OperationType.LT;
+            break;
+        case EQL_TOKEN:
+            thingToDo = OperationType.EQUAL;
+            break;
+        case NEQ_TOKEN:
+            thingToDo = OperationType.NOT_EQUAL;
+            break;
+        default:
+            throw new CodeGenerationException("BINARY EXPRESSION: Invalid op type" + operator.getType().toString());
         }
 
         Operation operationToAdd = new Operation(thingToDo, fun.getCurrBlock());
@@ -83,7 +85,5 @@ public class BinaryExpression extends Expression {
         Operand destOper = new Operand(Operand.OperandType.REGISTER, newRegNum);
         operationToAdd.setDestOperand(0, destOper);
         fun.getCurrBlock().appendOper(operationToAdd);
-
-        return operationToAdd;
     }
 }

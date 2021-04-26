@@ -17,9 +17,10 @@ public abstract class Expression implements ParseClass {
     public int getRegNum() {
         return regNum;
     }
+
     public void setRegNum(int destReg) {
         regNum = destReg;
     }
 
-    public abstract void genLLCode(Function fun) throws CodeGenerationException ;
+    public abstract void genLLCode(Function fun) throws CodeGenerationException;
 }

@@ -40,13 +40,13 @@ public class CallExpression extends Expression {
     }
   }
 
-  public Operation genLLCode(Function fun) throws CodeGenerationException {
+  public void genLLCode(Function fun) throws CodeGenerationException {
     // Generate pass operations using register locations from args
     int i = 0;
     for (Expression expr : args) {
       Operation passOperation = new Operation(Operation.OperationType.PASS, fun.getCurrBlock());
-      Operation argumentOperation = expr.genLLCode(fun);
-      int destReg = (int) argumentOperation.getDestOperand(0).getValue();
+      expr.genLLCode(fun);
+      int destReg = expr.getRegNum();
 
       // Args will always be registers since all nums are being assigned to registers
       Operand passedOperand = new Operand(Operand.OperandType.REGISTER, destReg);
@@ -75,13 +75,12 @@ public class CallExpression extends Expression {
     // Should this be moved out of this class?
     Operation postCallOperation = new Operation(Operation.OperationType.ASSIGN, fun.getCurrBlock());
     Operand postCallSrc = new Operand(Operand.OperandType.MACRO, "RetReg");
-    Operand postCallDest = new Operand(Operand.OperandType.REGISTER, fun.getNewRegNum());
+    int regNum = fun.getNewRegNum();
+    Operand postCallDest = new Operand(Operand.OperandType.REGISTER, regNum);
     postCallOperation.setDestOperand(0, postCallDest);
     postCallOperation.setSrcOperand(0, postCallSrc);
     fun.getCurrBlock().appendOper(postCallOperation);
 
-
-    //What should we return here?
-    return postCallOperation;
+    setRegNum(regNum);
   }
 }

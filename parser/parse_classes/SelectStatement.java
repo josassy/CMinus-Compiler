@@ -52,7 +52,9 @@ public class SelectStatement extends Statement {
         }
 
         // Gencode expr
-        Operand ifDest = expr.genLLCode(fun).getDestOperand(0);
+        expr.genLLCode(fun);
+        int ifReg = expr.getRegNum();
+        Operand ifDest = new Operand(Operand.OperandType.REGISTER, ifReg);
 
         // Make branch to post or else
         Operand zeroCompare = new Operand(Operand.OperandType.INTEGER, 0);
@@ -64,8 +66,7 @@ public class SelectStatement extends Statement {
         Operand branchOperand = null;
         if (elseStmt != null) {
             branchOperand = new Operand(Operand.OperandType.BLOCK, elseBlock.getBlockNum());
-        }
-        else {
+        } else {
             branchOperand = new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum());
         }
         branchDecisionOperation.setDestOperand(0, branchOperand);
@@ -76,7 +77,7 @@ public class SelectStatement extends Statement {
 
         // currentblock = then block
         fun.setCurrBlock(thenBlock);
-        
+
         // gencode for then
         stmt.genLLCode(fun);
 
@@ -100,7 +101,7 @@ public class SelectStatement extends Statement {
             // Append else block to unconnected chain
             fun.appendUnconnectedBlock(elseBlock);
         }
-         
+
         // currentblock = post
         fun.setCurrBlock(postBlock);
     }

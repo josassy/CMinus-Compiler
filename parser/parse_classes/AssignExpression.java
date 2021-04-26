@@ -31,26 +31,30 @@ public class AssignExpression extends Expression {
     ve.genLLCode(fun);
     int lhsDest = ve.getRegNum();
     rhs.genLLCode(fun);
-    
+    int rhsDest = rhs.getRegNum();
+
     // need to check if we are in the global symtable (thus global variable)
     if (CMinusCompiler.globalHash.containsKey(ve.id)) {
       // if so, need to generate a STORE to write back the changes to the global.
       Operation storeOperation = new Operation(Operation.OperationType.STORE_I, fun.getCurrBlock());
       Operand globalStoreLocation = new Operand(Operand.OperandType.STRING, ve.id);
       storeOperation.setSrcOperand(1, globalStoreLocation);
-      storeOperation.setSrcOperand(0, rhOp);
+      storeOperation.setSrcOperand(0, rhsDest);
 
       return storeOperation;
-    }
-    else {
+
+      // HMMM
+      this.setRegNum(0);
+
+    } else {
       // otherwise, do a regular assign operation (it is assign of the times)
       Operation assignOperation = new Operation(Operation.OperationType.ASSIGN, fun.getCurrBlock());
-      assignOperation.setDestOperand(0, lhOp);
-      assignOperation.setSrcOperand(0, rhOp);
-      
+      assignOperation.setDestOperand(0, lhsDest);
+      assignOperation.setSrcOperand(0, rhsDest);
+
       fun.getCurrBlock().appendOper(assignOperation);
 
-      return assignOperation;
+      this.setRegNum(lhsDest);
     }
   }
 }

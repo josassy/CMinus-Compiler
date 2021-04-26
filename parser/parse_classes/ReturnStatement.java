@@ -24,17 +24,18 @@ public class ReturnStatement extends Statement {
 
     public void genLLCode(Function fun) throws CodeGenerationException {
         if (expr != null) {
-            Operation retexpr = expr.genLLCode(fun);
-            Operand expressionResultOper = retexpr.getDestOperand(0);
-            
+            expr.genLLCode(fun);
+            int retDestReg = expr.getRegNum();
+            Operand expressionResultOper = new Operand(Operand.OperandType.REGISTER, retDestReg);
+
             // move expression result into return register
-            Operation moveOp = new Operation(Operation.OperationType.ASSIGN, fun.getCurrBlock());            
+            Operation moveOp = new Operation(Operation.OperationType.ASSIGN, fun.getCurrBlock());
             moveOp.setSrcOperand(0, expressionResultOper);
             Operand dest = new Operand(Operand.OperandType.MACRO, "RetReg");
             moveOp.setDestOperand(0, dest);
             fun.getCurrBlock().appendOper(moveOp);
         }
-        
+
         // jump operation to the exit block
         Operation jumpOp = new Operation(Operation.OperationType.JMP, fun.getCurrBlock());
         Operand jumpDest = new Operand(Operand.OperandType.BLOCK, fun.getReturnBlock().getBlockNum());

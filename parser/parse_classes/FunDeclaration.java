@@ -43,21 +43,18 @@ public class FunDeclaration extends Declaration {
     public Function genLLCode() throws CodeGenerationException {
         FuncParam head = null;
 
-
-        // Do we explicitly need to handle void params (no params) by adding a void FuncParam?
+        // Do we explicitly need to handle void params (no params) by adding a void
+        // FuncParam?
 
         Function thisFunction = null;
 
         if (type.getType() == Token.TokenType.INT_TOKEN) {
             thisFunction = new Function(1, id, head);
-        }
-        else if (type.getType() == Token.TokenType.VOID_TOKEN) {
+        } else if (type.getType() == Token.TokenType.VOID_TOKEN) {
             thisFunction = new Function(0, id, head);
-        }
-        else {
+        } else {
             throw new CodeGenerationException("FunDecl: Invalid return type " + type.toString());
         }
-
 
         thisFunction.createBlock0();
 
@@ -72,12 +69,12 @@ public class FunDeclaration extends Declaration {
             HashMap st = thisFunction.getTable();
             st.put(currItem.getName(), thisFunction.getNewRegNum());
             for (int i = 1; i < params.size(); i++) {
-              FuncParam nextItem = params.get(i).genLLCode();
-              currItem.setNextParam(nextItem);
-              currItem = nextItem;
+                FuncParam nextItem = params.get(i).genLLCode();
+                currItem.setNextParam(nextItem);
+                currItem = nextItem;
 
-              //Do we need to associate this with a different register?
-              st.put(currItem.getName(), thisFunction.getNewRegNum());
+                // for each param, add entry to the function symtable
+                st.put(currItem.getName(), thisFunction.getNewRegNum());
             }
         }
 

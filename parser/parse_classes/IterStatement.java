@@ -40,7 +40,9 @@ public class IterStatement extends Statement {
         fun.setCurrBlock(testBlock);
 
         // Gencode expr
-        Operand ifDest = expr.genLLCode(fun).getDestOperand(0);
+        expr.genLLCode(fun);
+        int ifDestReg = expr.getRegNum();
+        Operand ifDest = new Operand(Operand.OperandType.REGISTER, ifDestReg);
 
         // Make branch to post
         Operand zeroCompare = new Operand(Operand.OperandType.INTEGER, 0);
@@ -56,7 +58,7 @@ public class IterStatement extends Statement {
 
         // currentblock = then block
         fun.setCurrBlock(thenBlock);
-        
+
         // gencode for then
         stmt.genLLCode(fun);
 
@@ -68,7 +70,7 @@ public class IterStatement extends Statement {
 
         // append postblock to fall through from then
         fun.appendToCurrentBlock(postBlock);
-         
+
         // currentblock = post
         fun.setCurrBlock(postBlock);
     }

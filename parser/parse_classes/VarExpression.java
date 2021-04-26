@@ -42,34 +42,31 @@ public class VarExpression extends Expression {
     }
   }
 
-  public Operation genLLCode(Function fun) throws CodeGenerationException {
+  public void genLLCode(Function fun) throws CodeGenerationException {
     BasicBlock currBlock = fun.getCurrBlock();
 
     // try to retrieve from function symtable
     HashMap st = fun.getTable();
     if (st.containsKey(id)) {
-      // create dummy operation to pass back the destination register without actually doing anything
-      Operation dummyOper = new Operation(OperationType.LOAD_I, currBlock);
-      Operand newDest = new Operand(Operand.OperandType.REGISTER, (int)st.get(id));
-      dummyOper.setDestOperand(0, newDest);
-
-      // DON'T APPEND THE DUMMY OPERATION
-      return dummyOper;
+      this.setRegNum(st.get(id));
     }
-    
+
     // if can't find, maybe its a global???
     else if (CMinusCompiler.globalHash.containsKey(id)) {
       // create a load operation
       Operation loadOper = new Operation(OperationType.LOAD_I, currBlock);
       Operand newSrc = new Operand(Operand.OperandType.STRING, id);
-      Operand newDest = new Operand(Operand.OperandType.REGISTER, fun.getNewRegNum());
+
+      int newReg = fun.getNewRegNum();
+      Operand newDest = new Operand(Operand.OperandType.REGISTER, newReg);
       loadOper.setSrcOperand(0, newSrc);
       loadOper.setDestOperand(0, newDest);
-      
+
       // APPEND THE LOAD OPERATION
       currBlock.appendOper(loadOper);
 
-      return loadOper;
+      // Annoatate destination register
+      this.setRegNum(newReg);
     }
 
     // if can't find in global, this variable probably doesn't exist!

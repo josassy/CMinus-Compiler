@@ -26,7 +26,6 @@ public class ExprStatement extends Statement {
     }
 
     public void genLLCode(Function fun) throws CodeGenerationException {
-        Operation thisOper = expr.genLLCode(fun);
-        fun.getCurrBlock().appendOper(thisOper);
+        expr.genLLCode(fun);
     }
 }

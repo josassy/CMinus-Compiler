@@ -11,7 +11,7 @@ import java.io.Writer;
  * 
  * Represent a generic declaration in C-. Contains a type token and ID token.
  */
-public class Declaration implements ParseClass {
+public abstract class Declaration implements ParseClass {
 
   protected Token type;
   protected String id;
@@ -25,7 +25,5 @@ public class Declaration implements ParseClass {
     ParseUtility.IndentedPrintln(type.getData().toString() + " " + id, indent, out);
   }
 
-  public CodeItem genLLCode() throws CodeGenerationException {
-    return null;
-  }
+  public abstract CodeItem genLLCode() throws CodeGenerationException;
 }
