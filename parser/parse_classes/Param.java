@@ -3,6 +3,7 @@ package parser.parse_classes;
 import parser.ParseUtility;
 import lowlevel.CodeItem;
 import lowlevel.FuncParam;
+import lowlevel.Data;
 import java.io.Writer;
 
 /**
@@ -31,6 +32,6 @@ public class Param implements ParseClass {
   }
 
   public FuncParam genLLCode() {
-    return null;
+    return new FuncParam(Data.TYPE_INT, id);
   }
 }

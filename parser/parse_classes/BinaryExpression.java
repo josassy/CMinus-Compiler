@@ -33,10 +33,8 @@ public class BinaryExpression extends Expression {
     }
 
     public Operation genLLCode(Function fun) throws CodeGenerationException {
-        Operation lop = lhs.genLLCode(fun);
-        Operand lopDest = lop.getDestOperand(0);
-        Operation rop = rhs.genLLCode(fun);
-        Operand ropDest = rop.getDestOperand(0);
+        Operand lopDest = lhs.genLLCode(fun).getDestOperand(0);
+        Operand ropDest = rhs.genLLCode(fun).getDestOperand(0);
 
         OperationType thingToDo;
 
@@ -75,17 +73,17 @@ public class BinaryExpression extends Expression {
                 throw new CodeGenerationException("BINARY EXPRESSION: Invalid op type" + operator.getType().toString());
         }
 
-        Operation operToAdd = new Operation(thingToDo, fun.getCurrBlock());
-        operToAdd.setSrcOperand(0, lopDest);
-        operToAdd.setSrcOperand(1, ropDest);
+        Operation operationToAdd = new Operation(thingToDo, fun.getCurrBlock());
+        operationToAdd.setSrcOperand(0, lopDest);
+        operationToAdd.setSrcOperand(1, ropDest);
 
         int newRegNum = fun.getNewRegNum();
         setRegNum(newRegNum);
 
         Operand destOper = new Operand(Operand.OperandType.REGISTER, newRegNum);
-        operToAdd.setDestOperand(0, destOper);
-        fun.getCurrBlock().appendOper(operToAdd);
+        operationToAdd.setDestOperand(0, destOper);
+        fun.getCurrBlock().appendOper(operationToAdd);
 
-        return operToAdd;
+        return operationToAdd;
     }
 }

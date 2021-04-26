@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import parser.CodeGenerationException;
 import lowlevel.*;
 import java.io.Writer;
 
@@ -21,9 +22,9 @@ public class ReturnStatement extends Statement {
         expr.Print(out, indent + 1);
     }
 
-    public void genLLCode(Function fun) {
+    public void genLLCode(Function fun) throws CodeGenerationException {
         if (expr != null) {
-            Operation retexpr = expr.genLLCode();
+            Operation retexpr = expr.genLLCode(fun);
             Operand expressionResultOper = retexpr.getDestOperand(0);
             
             // move expression result into return register

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch CMinusCompiler",
+            "request": "launch",
+            "mainClass": "compiler.CMinusCompiler",
+            "projectName": "Compiler-CMinus-Scanner_d1c05ae3"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"

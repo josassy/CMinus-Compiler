@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import parser.CodeGenerationException;
 import java.util.ArrayList;
 import lowlevel.*;
 import java.io.Writer;
@@ -32,7 +33,7 @@ public class CompStatement extends Statement {
     ParseUtility.IndentedPrintln("}", indent, out);
   }
 
-  public void genLLCode(Function fun) {
+  public void genLLCode(Function fun) throws CodeGenerationException {
     
     //Parse decls into CodeItems
     HashMap st = fun.getTable();
@@ -43,20 +44,6 @@ public class CompStatement extends Statement {
     //Parse stmts into Operations
     for (Statement stmt : stmts) {
       stmt.genLLCode(fun);
-      /**
-      if (thisOper.getType() == Operation.OperationType.JMP) {
-
-      }
-      else if (thisOper.getType() == Operation.OperationType.BNE) {
-
-      }
-      else if (thisOper.getType() == Operation.OperationType.BEQ) {
-
-      }
-      else {
-        fun.getCurrBlock().appendOper(thisOper);
-      }
-      */
     }
   }
 }

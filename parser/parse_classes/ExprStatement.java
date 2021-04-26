@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import parser.CodeGenerationException;
 import lowlevel.*;
 import java.io.Writer;
 
@@ -24,8 +25,8 @@ public class ExprStatement extends Statement {
         }
     }
 
-    public void genLLCode(Function fun) {
-        Operation thisOper = expr.genLLCode();
+    public void genLLCode(Function fun) throws CodeGenerationException {
+        Operation thisOper = expr.genLLCode(fun);
         fun.getCurrBlock().appendOper(thisOper);
     }
 }

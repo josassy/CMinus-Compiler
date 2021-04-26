@@ -48,18 +48,28 @@ public class VarExpression extends Expression {
     // try to retrieve from function symtable
     HashMap st = fun.getTable();
     if (st.containsKey(id)) {
-      int key = (int)st.get(id);
+      // create dummy operation to pass back the destination register without actually doing anything
+      Operation dummyOper = new Operation(OperationType.LOAD_I, currBlock);
+      Operand newDest = new Operand(Operand.OperandType.REGISTER, (int)st.get(id));
+      dummyOper.setDestOperand(0, newDest);
+
+      // DON'T APPEND THE DUMMY OPERATION
+      return dummyOper;
     }
     
     // if can't find, maybe its a global???
     else if (CMinusCompiler.globalHash.containsKey(id)) {
       // create a load operation
       Operation loadOper = new Operation(OperationType.LOAD_I, currBlock);
-      Operand newSrc = new Operand(Operand.OperandType.REGISTER, (int)CMinusCompiler.globalHash.get(id));
+      Operand newSrc = new Operand(Operand.OperandType.STRING, id);
       Operand newDest = new Operand(Operand.OperandType.REGISTER, fun.getNewRegNum());
       loadOper.setSrcOperand(0, newSrc);
       loadOper.setDestOperand(0, newDest);
+      
+      // APPEND THE LOAD OPERATION
       currBlock.appendOper(loadOper);
+
+      return loadOper;
     }
 
     // if can't find in global, this variable probably doesn't exist!

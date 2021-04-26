@@ -131,12 +131,14 @@ public class CMinusCompiler implements Compiler {
 
         } catch (ParseException e) {
             System.out.println("ParseException: " + e);
+        } catch (CodeGenerationException c) {
+            System.out.println(c);
         }
 
     }
 
     public static void main(String[] args) {
-        String filePrefix = "test5";
+        String filePrefix = "27";
         CMinusCompiler myCompiler = new CMinusCompiler();
         myCompiler.setGenX64Code(true);
         myCompiler.compile(filePrefix);

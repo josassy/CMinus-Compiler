@@ -7,6 +7,7 @@ import scanner.Token;
 import lowlevel.*;
 import parser.CodeGenerationException;
 import java.io.Writer;
+import java.util.HashMap;
 
 /**
  * File: FunDeclaration.java
@@ -42,15 +43,8 @@ public class FunDeclaration extends Declaration {
     public Function genLLCode() throws CodeGenerationException {
         FuncParam head = null;
 
-        if (params.size() > 0) {
-            head = params.get(0).genLLCode();
-            FuncParam currItem = head;
-            for (int i = 1; i < params.size(); i++) {
-              FuncParam nextItem = params.get(i).genLLCode();
-              currItem.setNextParam(nextItem);
-              currItem = nextItem;
-            }
-        }
+
+        // Do we explicitly need to handle void params (no params) by adding a void FuncParam?
 
         Function thisFunction = null;
 
@@ -71,6 +65,21 @@ public class FunDeclaration extends Declaration {
         thisFunction.appendBlock(firstBlock);
 
         thisFunction.setCurrBlock(firstBlock);
+
+        if (params != null) {
+            head = params.get(0).genLLCode();
+            FuncParam currItem = head;
+            HashMap st = thisFunction.getTable();
+            st.put(currItem.getName(), thisFunction.getNewRegNum());
+            for (int i = 1; i < params.size(); i++) {
+              FuncParam nextItem = params.get(i).genLLCode();
+              currItem.setNextParam(nextItem);
+              currItem = nextItem;
+
+              //Do we need to associate this with a different register?
+              st.put(currItem.getName(), thisFunction.getNewRegNum());
+            }
+        }
 
         cs.genLLCode(thisFunction);
 

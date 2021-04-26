@@ -1,4 +1,5 @@
 package parser.parse_classes;
+import parser.CodeGenerationException;
 import lowlevel.*;
 
 /**
@@ -7,5 +8,5 @@ import lowlevel.*;
  * Represent a generic Statement class in C-.
  */
 public abstract class Statement implements ParseClass {
-  public abstract void genLLCode(Function fun);
+  public abstract void genLLCode(Function fun) throws CodeGenerationException;
 }
