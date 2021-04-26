@@ -41,7 +41,8 @@ public class CMinusCompiler implements Compiler {
             // myParser.printAST(parseTree);
             fileName = filePrefix + ".ast";
             PrintWriter outFile = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-            parseTree.Print(outFile, 0);
+            parseTree.Print(outFile, 1);
+            outFile.close();
 
             CodeItem lowLevelCode = parseTree.genLLCode();
 
