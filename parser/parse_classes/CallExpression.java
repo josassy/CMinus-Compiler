@@ -1,6 +1,7 @@
 package parser.parse_classes;
 
 import parser.ParseUtility;
+import lowlevel.*;
 import java.util.ArrayList;
 import java.io.Writer;
 
@@ -35,5 +36,10 @@ public class CallExpression extends Expression {
     } else {
       ParseUtility.IndentedPrintln(id + "()", indent, out);
     }
+  }
+
+  public Operation genLLCode(Function fun) {
+    Operation newOperation = new Operation(Operation.OperationType.CALL, fun.getCurrBlock());
+    Operand callSrc = new Operand(Operand.OperandType.)
   }
 }

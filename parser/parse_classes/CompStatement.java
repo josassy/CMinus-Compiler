@@ -2,7 +2,9 @@ package parser.parse_classes;
 
 import parser.ParseUtility;
 import java.util.ArrayList;
+import lowlevel.*;
 import java.io.Writer;
+import java.util.HashMap;
 
 /**
  * File: CompStatement.java
@@ -28,5 +30,33 @@ public class CompStatement extends Statement {
       s.Print(out, indent + 1);
     }
     ParseUtility.IndentedPrintln("}", indent, out);
+  }
+
+  public void genLLCode(Function fun) {
+    
+    //Parse decls into CodeItems
+    HashMap st = fun.getTable();
+    for (Declaration decl : decls) {
+      st.put(decl.id, fun.getNewRegNum());
+    }
+
+    //Parse stmts into Operations
+    for (Statement stmt : stmts) {
+      stmt.genLLCode(fun);
+      /**
+      if (thisOper.getType() == Operation.OperationType.JMP) {
+
+      }
+      else if (thisOper.getType() == Operation.OperationType.BNE) {
+
+      }
+      else if (thisOper.getType() == Operation.OperationType.BEQ) {
+
+      }
+      else {
+        fun.getCurrBlock().appendOper(thisOper);
+      }
+      */
+    }
   }
 }
