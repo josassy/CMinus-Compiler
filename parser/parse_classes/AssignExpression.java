@@ -27,9 +27,10 @@ public class AssignExpression extends Expression {
     rhs.Print(out, indent + 1);
   }
 
-  public Operation genLLCode(Function fun) throws CodeGenerationException {
-    Operand lhOp = ve.genLLCode(fun).getDestOperand(0);
-    Operand rhOp = rhs.genLLCode(fun).getDestOperand(0);
+  public void genLLCode(Function fun) throws CodeGenerationException {
+    ve.genLLCode(fun);
+    int lhsDest = ve.getRegNum();
+    rhs.genLLCode(fun);
     
     // need to check if we are in the global symtable (thus global variable)
     if (CMinusCompiler.globalHash.containsKey(ve.id)) {
