@@ -97,7 +97,6 @@ int main (void) {
   putchar(83); 
   printInt(3510);
   putchar(10);
-
   b = 0;
   c = 1;
   g = 1;

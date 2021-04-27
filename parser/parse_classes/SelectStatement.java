@@ -96,7 +96,7 @@ public class SelectStatement extends Statement {
             Operation jumpToPostOperation = new Operation(Operation.OperationType.JMP, fun.getCurrBlock());
             Operand destBlockOperand = new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum());
             jumpToPostOperation.setSrcOperand(0, destBlockOperand);
-            elseBlock.appendOper(jumpToPostOperation);
+            fun.getCurrBlock().appendOper(jumpToPostOperation);
 
             // Append else block to unconnected chain
             fun.appendUnconnectedBlock(elseBlock);
