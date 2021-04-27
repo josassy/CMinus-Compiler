@@ -12,6 +12,13 @@ import x86codegen.*;
 import x64codegen.*;
 import dataflow.*;
 
+/**
+ * File: CMinusCompiler.java
+ * 
+ * Contains top-level compile method that calls the scanner, parser, low-level
+ * code generation, optimization, and assembly generation methods.
+ */
+
 public class CMinusCompiler implements Compiler {
 
     public static HashMap globalHash = new HashMap();
